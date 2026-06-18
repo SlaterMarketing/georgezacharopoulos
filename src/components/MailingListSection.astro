@@ -1,0 +1,41 @@
+---
+import { EmbedFormIsland } from "./EmbedFormIsland";
+import { site } from "../content/site";
+import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
+import { fetchSiteManifest, resolveFormId } from "../lib/kintana-site";
+
+const { apiKey, baseUrl, newsletterFormId } = getKintanaEnv();
+const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
+const formId = await resolveFormId({
+  kind: "NEWSLETTER",
+  manifestKey: "newsletter",
+  manifest,
+  envOverride: newsletterFormId,
+});
+---
+
+<section class="mailing-section" id="mailing">
+  <div class="container mailing-inner">
+    <div class="mailing-copy">
+      <p class="section-eyebrow section-eyebrow--light">Stay in the loop</p>
+      <h2 class="mailing-title">{site.mailingList.title}</h2>
+      <p class="mailing-lede">{site.mailingList.body}</p>
+    </div>
+
+    {
+      hasKintanaCredentials() ? (
+        <div class="mailing-form">
+          <EmbedFormIsland
+            client:load
+            apiKey={apiKey!}
+            baseUrl={baseUrl!}
+            formId={formId}
+            kind={formId ? undefined : "NEWSLETTER"}
+          />
+        </div>
+      ) : (
+        <p class="mailing-fallback">Mailing list signup will appear here once connected.</p>
+      )
+    }
+  </div>
+</section>

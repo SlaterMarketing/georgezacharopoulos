@@ -1,0 +1,9 @@
+---
+const slug = Astro.params.slug;
+
+if (!slug) {
+  return Astro.redirect("/shows/", 302);
+}
+
+return Astro.redirect(`/shows/${slug}/#tickets`, 302);
+---

@@ -1,0 +1,31 @@
+---
+import type { KintanaPublicEvent } from "@kintana/sdk";
+import { isTicketingBlocked } from "../../lib/events";
+
+interface Props {
+  event: KintanaPublicEvent;
+}
+
+const { event } = Astro.props;
+const blocked = isTicketingBlocked(event);
+---
+
+{
+  blocked ? (
+    <p class="show-unavailable">
+      Ticketing is unavailable
+      {event.status === "sold-out" ? " — this show is sold out." : "."}
+    </p>
+  ) : event.ticketingType === "EXTERNAL" && event.ticketUrl?.trim() ? (
+    <p style="margin-top: 1rem;">
+      <a class="show-ticket-link" href={event.ticketUrl} target="_blank" rel="noopener noreferrer">
+        Get tickets
+      </a>
+    </p>
+  ) : (
+    <div class="ticket-widget-wrap" style="margin-top: 1rem;">
+      <div class="ticket-widget" data-kintana-widget={`event:${event.id}`} aria-label="Ticket checkout" />
+      <p class="ticket-widget-loading">Loading tickets…</p>
+    </div>
+  )
+}

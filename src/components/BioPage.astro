@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroShell from "./HeroShell.astro";
+import BottomNav from "./BottomNav.astro";
+import { site } from "../content/site";
+import "../styles/global.css";
+---
+
+<Base title={`Bio · ${site.artistName}`} description={site.description}>
+  <main class="page-main">
+    <HeroShell scrollable={true}>
+      <div class="page-panel">
+        <div class="page-panel-inner">
+          <div class="bio-prose">
+            {
+              site.about.paragraphs.map((paragraph) => (
+                <p>{paragraph}</p>
+              ))
+            }
+
+            <section class="bio-show-block" id="show">
+              <h2>{site.varietyShow.title}</h2>
+              <p>{site.varietyShow.body}</p>
+              <a class="bio-show-link" href={site.varietyShow.href} target="_blank" rel="noopener noreferrer">
+                Club Cumming →
+              </a>
+            </section>
+
+            <p class="bio-credit">{site.about.photoCredit}</p>
+          </div>
+        </div>
+      </div>
+      <BottomNav currentPath="/bio/" />
+    </HeroShell>
+  </main>
+</Base>

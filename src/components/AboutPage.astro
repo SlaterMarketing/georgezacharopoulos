@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteHeader from "./SiteHeader.astro";
+import SiteFooter from "./SiteFooter.astro";
+import { site } from "../content/site";
+import { createKintanaClientFromEnv, hasKintanaCredentials } from "../lib/kintana-env";
+import { reserveTicketHref } from "../lib/events";
+import type { KintanaPublicEvent } from "@kintana/sdk";
+import "../styles/global.css";
+
+let events: KintanaPublicEvent[] = [];
+
+if (hasKintanaCredentials()) {
+  try {
+    events = await createKintanaClientFromEnv().listEvents({ limit: 50 });
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error("[jjnader] listEvents failed:", error);
+    }
+  }
+}
+
+const reserveHref = reserveTicketHref(events);
+---
+
+<Base title={`About · ${site.artistName}`} description={site.about.title}>
+  <div class="site-shell">
+    <SiteHeader nextShowHref={reserveHref} />
+
+    <main class="site-main page-main">
+      <article class="container page-article">
+        <header class="section-header section-header--left">
+          <p class="section-eyebrow">About</p>
+          <h1 class="section-title">{site.about.title}</h1>
+        </header>
+        <figure class="about-photo">
+          <img
+            src={site.about.image}
+            alt={site.about.imageAlt}
+            width="1200"
+            height="800"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        <div class="prose">
+          <p class="prose-lead">{site.about.intro}</p>
+          {
+            site.about.body.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))
+          }
+          <p class="prose-signoff">— {site.artistName}</p>
+        </div>
+      </article>
+    </main>
+
+    <SiteFooter />
+  </div>
+</Base>

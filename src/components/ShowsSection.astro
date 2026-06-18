@@ -1,0 +1,63 @@
+---
+import { site } from "../content/site";
+import type { KintanaPublicEvent } from "@kintana/sdk";
+import {
+  eventCity,
+  eventShowHref,
+  eventTicketsHref,
+  eventVenue,
+  formatShowDate,
+  ticketLinkLabel,
+} from "../lib/events";
+
+interface Props {
+  events: KintanaPublicEvent[];
+}
+
+const { events } = Astro.props;
+---
+
+<section>
+  <h1 class="page-heading">{site.showsHeading}</h1>
+
+  {
+    events.length === 0 ? (
+      <p class="shows-empty">{site.noShowsMessage}</p>
+    ) : (
+      <ul class="shows-list">
+        {
+          events.map((event) => {
+            const showHref = eventShowHref(event);
+            const ticketsHref = eventTicketsHref(event);
+            return (
+              <li class="shows-row">
+                <div class="shows-date">
+                  {
+                    showHref ? (
+                      <a href={showHref}>{formatShowDate(event.date)}</a>
+                    ) : (
+                      formatShowDate(event.date)
+                    )
+                  }
+                </div>
+                <div class="shows-info">
+                  <h3>{event.name}</h3>
+                  <p>
+                    {eventVenue(event)} · {eventCity(event)}
+                  </p>
+                </div>
+                <a
+                  class="shows-link"
+                  href={ticketsHref}
+                  {...showHref ? {} : { target: "_blank", rel: "noopener noreferrer" }}
+                >
+                  {ticketLinkLabel(event)}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    )
+  }
+</section>

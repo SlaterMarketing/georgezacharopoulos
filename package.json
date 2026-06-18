@@ -1,0 +1,29 @@
+{
+  "name": "michaeljbevan",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=michaeljbevan",
+    "setup:forms": "node scripts/setup-kintana-forms.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.13",
+    "@astrojs/react": "^5.0.7",
+    "@kintana/sdk": "^0.9.0",
+    "astro": "^5.13.14",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.100.0"
+  }
+}

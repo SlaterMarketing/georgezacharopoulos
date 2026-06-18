@@ -1,0 +1,134 @@
+---
+import Base from "../../layouts/Base.astro";
+import HeroShell from "../HeroShell.astro";
+import BottomNav from "../BottomNav.astro";
+import ShowCheckoutPanel from "./ShowCheckoutPanel.astro";
+import { site } from "../../content/site";
+import { createKintanaClientFromEnv, hasKintanaCredentials } from "../../lib/kintana-env";
+import {
+  eventCity,
+  eventStatusLabel,
+  eventVenue,
+  formatEventSchedule,
+  formatMinorUnitsPrice,
+  sortedLineup,
+} from "../../lib/events";
+import { eventHeroUrl } from "../../lib/event-media";
+import type { KintanaPublicEvent } from "@kintana/sdk";
+import "../../styles/global.css";
+
+interface Props {
+  slug: string | undefined;
+}
+
+const { slug } = Astro.props;
+
+let event: KintanaPublicEvent | null = null;
+
+if (hasKintanaCredentials() && slug) {
+  try {
+    event = await createKintanaClientFromEnv().getEvent(slug);
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error("[michaeljbevan] getEvent failed:", error);
+    }
+  }
+}
+
+const pageTitle = event ? `${event.name} · ${site.artistName}` : `Show · ${site.artistName}`;
+const pageDescription = event ? formatEventSchedule(event) : site.description;
+const aboutCopy = event?.longDescription?.trim() || event?.description?.trim() || "";
+const statusLabel = event ? eventStatusLabel(event.status) : null;
+const priceLabel = event ? formatMinorUnitsPrice(event) : null;
+const lineup = event ? sortedLineup(event) : [];
+const heroImage = event ? eventHeroUrl(event) : null;
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <main class="page-main">
+    <HeroShell scrollable={true}>
+      <div class="page-panel">
+        <div class="page-panel-inner">
+          {
+            event ? (
+              <div class="show-layout has-checkout">
+                <article>
+                  <p class="show-back">
+                    <a href="/shows/">← All shows</a>
+                  </p>
+
+                  {statusLabel ? <p class="show-status">{statusLabel}</p> : null}
+
+                  <h1 class="show-title">{event.name}</h1>
+                  <p class="show-meta-line">{formatEventSchedule(event)}</p>
+                  <p class="show-meta-line">
+                    {eventVenue(event)}
+                    {eventCity(event) !== "—" ? ` · ${eventCity(event)}` : ""}
+                  </p>
+                  {event.venue?.address ? <p class="show-meta-line">{event.venue.address}</p> : null}
+                  {priceLabel ? <p class="show-meta-line">From {priceLabel}</p> : null}
+                  {event.ageRestriction ? <p class="show-meta-line">{event.ageRestriction}</p> : null}
+
+                  {
+                    heroImage ? (
+                      <figure class="show-poster">
+                        <img src={heroImage} alt="" loading="eager" />
+                      </figure>
+                    ) : null
+                  }
+
+                  {
+                    aboutCopy ? (
+                      <section class="show-section">
+                        <h2>About</h2>
+                        <div class="show-about">{aboutCopy}</div>
+                      </section>
+                    ) : null
+                  }
+
+                  {
+                    lineup.length > 0 ? (
+                      <section class="show-section">
+                        <h2>Lineup</h2>
+                        <ul class="show-lineup">
+                          {
+                            lineup.map((comedian) => (
+                              <li>
+                                {comedian.photoUrl ? (
+                                  <img class="show-lineup-photo" src={comedian.photoUrl} alt="" loading="lazy" />
+                                ) : null}
+                                <span>
+                                  {comedian.name}
+                                  {comedian.id === event.headliner?.id ? " (headliner)" : ""}
+                                </span>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </section>
+                    ) : null
+                  }
+                </article>
+
+                <aside class="show-checkout-sticky" id="tickets">
+                  <div class="show-checkout-panel">
+                    <h2>Get tickets</h2>
+                    <ShowCheckoutPanel event={event} />
+                  </div>
+                </aside>
+              </div>
+            ) : (
+              <article>
+                <p class="show-back">
+                  <a href="/shows/">← All shows</a>
+                </p>
+                <p class="muted">This show could not be found.</p>
+              </article>
+            )
+          }
+        </div>
+      </div>
+      <BottomNav currentPath="/shows/" />
+    </HeroShell>
+  </main>
+</Base>

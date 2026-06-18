@@ -1,0 +1,15 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroShell from "./HeroShell.astro";
+import BottomNav from "./BottomNav.astro";
+import { site } from "../content/site";
+import "../styles/global.css";
+---
+
+<Base title={`${site.artistName} · Comedian`} description={site.description}>
+  <main class="page-main">
+    <HeroShell showTitle={true}>
+      <BottomNav currentPath="/" />
+    </HeroShell>
+  </main>
+</Base>

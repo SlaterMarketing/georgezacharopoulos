@@ -1,0 +1,42 @@
+---
+import { site } from "../content/site";
+import SocialIcon from "./SocialIcon.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <p class="footer-name">{site.artistName}</p>
+      <p class="footer-tagline">{site.heroEyebrow}</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      {
+        site.nav.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))
+      }
+    </nav>
+
+    <div class="footer-social" aria-label="Social links">
+      {
+        site.social.map((link) => (
+          <SocialIcon platform={link.platform} href={link.href} label={link.label} size="md" />
+        ))
+      }
+      <SocialIcon platform="email" href="/contact/" label="Email" size="md" />
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© {year} {site.artistName}</p>
+    <p>
+      {site.footerCredit.prefix}
+      <a href={site.footerCredit.href} target="_blank" rel="noopener noreferrer">
+        {site.footerCredit.label}
+      </a>
+    </p>
+  </div>
+</footer>

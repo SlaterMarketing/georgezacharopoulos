@@ -1,0 +1,48 @@
+---
+import { getKintanaEnv } from "../lib/kintana-env";
+import { site } from "../content/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = site.artistName,
+  description = site.description,
+}: Props = Astro.props;
+
+const { apiKey, baseUrl, trackerToken, siteUrl } = getKintanaEnv();
+const trackBase = baseUrl?.replace(/\/$/, "") ?? "";
+const trackToken = trackerToken?.trim() || apiKey?.trim() || "";
+const canonicalUrl = siteUrl?.replace(/\/$/, "") || Astro.url.origin;
+const pageUrl = new URL(Astro.url.pathname, canonicalUrl).href;
+const loadTracker = Boolean(trackBase && trackToken);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#100e0d" />
+    <link rel="icon" href="/favicon.webp" type="image/webp" />
+    <link rel="canonical" href={pageUrl} />
+    {
+      loadTracker ? (
+        <script
+          is:inline
+          async
+          src={`${trackBase}/_t/k.js`}
+          data-token={trackToken}
+          data-api-base={trackBase}
+        />
+      ) : null
+    }
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

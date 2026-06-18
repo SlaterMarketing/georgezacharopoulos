@@ -1,0 +1,33 @@
+---
+import { site } from "../content/site";
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+
+function isActive(href: string) {
+  if (href.startsWith("http")) return false;
+  const path = href.replace(/#.*$/, "").replace(/\/$/, "") || "/";
+  const current = currentPath.replace(/\/$/, "") || "/";
+  if (path === "/") return current === "/";
+  return current === path || current.startsWith(`${path}/`);
+}
+---
+
+<nav class="bottom-nav" aria-label="Primary">
+  {
+    site.nav.map((item) => (
+      <a
+        class:list={["bottom-nav-link", { "is-active": isActive(item.href) }]}
+        href={item.href}
+        {...("external" in item && item.external
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
+      >
+        {item.label}
+      </a>
+    ))
+  }
+</nav>

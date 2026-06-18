@@ -1,0 +1,51 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroShell from "./HeroShell.astro";
+import BottomNav from "./BottomNav.astro";
+import { EmbedFormIsland } from "./EmbedFormIsland";
+import { site } from "../content/site";
+import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
+import { fetchSiteManifest, resolveFormId } from "../lib/kintana-site";
+import "../styles/global.css";
+
+const { apiKey, baseUrl, showRequestFormId } = getKintanaEnv();
+const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
+const formId = await resolveFormId({
+  kind: "SHOW_REQUEST",
+  manifestKey: "showRequest",
+  manifest,
+  envOverride: showRequestFormId,
+});
+---
+
+<Base title={`Request a show · ${site.artistName}`} description="Request Michael Bevan in your city.">
+  <main class="page-main">
+    <HeroShell scrollable={true}>
+      <div class="page-panel">
+        <div class="page-panel-inner">
+          <h1 class="page-heading">Your city</h1>
+          <p class="page-lede">
+            Want Michael in your town? Tell us where — we'll reach out when routing makes sense.
+          </p>
+
+          {
+            hasKintanaCredentials() ? (
+              <div class="contact-form" style="margin-top: 2rem;">
+                <EmbedFormIsland
+                  client:load
+                  apiKey={apiKey!}
+                  baseUrl={baseUrl!}
+                  formId={formId}
+                  kind={formId ? undefined : "SHOW_REQUEST"}
+                />
+              </div>
+            ) : (
+              <p class="shows-empty" style="margin-top: 2rem;">Request form will appear here once connected.</p>
+            )
+          }
+        </div>
+      </div>
+      <BottomNav currentPath="/request-a-show/" />
+    </HeroShell>
+  </main>
+</Base>

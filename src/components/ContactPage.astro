@@ -1,0 +1,74 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroShell from "./HeroShell.astro";
+import BottomNav from "./BottomNav.astro";
+import { EmbedFormIsland } from "./EmbedFormIsland";
+import { site } from "../content/site";
+import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
+import { fetchSiteManifest, resolveFormId } from "../lib/kintana-site";
+import "../styles/global.css";
+
+const { apiKey, baseUrl, showRequestFormId } = getKintanaEnv();
+const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
+const contactFormId = await resolveFormId({
+  kind: "SHOW_REQUEST",
+  manifestKey: "showRequest",
+  manifest,
+  envOverride: showRequestFormId,
+});
+---
+
+<Base title={`Contact · ${site.artistName}`} description={site.contact.title}>
+  <main class="page-main">
+    <HeroShell scrollable={true}>
+      <div class="page-panel">
+        <div class="page-panel-inner">
+          <h1 class="page-heading">{site.contact.title}</h1>
+          <p class="page-lede">{site.contact.body}</p>
+
+          <div class="contact-grid">
+            <div class="contact-lines">
+              <div class="contact-block">
+                <p class="contact-label">Bookings</p>
+                <a class="contact-value" href={`mailto:${site.bookingsEmail}`}>{site.bookingsEmail}</a>
+              </div>
+              <div class="contact-block">
+                <p class="contact-label">General</p>
+                <a class="contact-value" href={`mailto:${site.email}`}>{site.email}</a>
+              </div>
+              <div class="social-row">
+                {
+                  site.social.map((link) => (
+                    <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+                  ))
+                }
+              </div>
+            </div>
+
+            {
+              hasKintanaCredentials() ? (
+                <div class="contact-form">
+                  <EmbedFormIsland
+                    client:load
+                    apiKey={apiKey!}
+                    baseUrl={baseUrl!}
+                    formId={contactFormId}
+                    kind={contactFormId ? undefined : "SHOW_REQUEST"}
+                  />
+                </div>
+              ) : null
+            }
+          </div>
+
+          <p class="page-footer-note">
+            {site.footerCredit.prefix}
+            <a href={site.footerCredit.href} target="_blank" rel="noopener noreferrer">
+              {site.footerCredit.label}
+            </a>
+          </p>
+        </div>
+      </div>
+      <BottomNav currentPath="/contact/" />
+    </HeroShell>
+  </main>
+</Base>
