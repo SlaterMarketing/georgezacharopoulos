@@ -2,20 +2,15 @@
 import Base from "../layouts/Base.astro";
 import HeroShell from "./HeroShell.astro";
 import BottomNav from "./BottomNav.astro";
-import { EmbedFormIsland } from "./EmbedFormIsland";
+import { ShowRequestForm } from "./ShowRequestForm";
 import { site } from "../content/site";
 import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
-import { fetchSiteManifest, resolveFormId } from "../lib/kintana-site";
+import { fetchSiteManifest, endpointSlugFromManifest } from "../lib/kintana-site";
 import "../styles/global.css";
 
-const { apiKey, baseUrl, showRequestFormId } = getKintanaEnv();
+const { apiKey, baseUrl } = getKintanaEnv();
 const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
-const formId = await resolveFormId({
-  kind: "SHOW_REQUEST",
-  manifestKey: "showRequest",
-  manifest,
-  envOverride: showRequestFormId,
-});
+const endpointSlug = endpointSlugFromManifest(manifest, "showRequest", "contact");
 ---
 
 <Base title={`Request a show · ${site.artistName}`} description="Request Michael Bevan in your city.">
@@ -31,12 +26,13 @@ const formId = await resolveFormId({
           {
             hasKintanaCredentials() ? (
               <div class="contact-form" style="margin-top: 2rem;">
-                <EmbedFormIsland
+                <ShowRequestForm
                   client:load
                   apiKey={apiKey!}
                   baseUrl={baseUrl!}
-                  formId={formId}
-                  kind={formId ? undefined : "SHOW_REQUEST"}
+                  endpointSlug={endpointSlug}
+                  mode="country"
+                  className="contact-form-inner"
                 />
               </div>
             ) : (

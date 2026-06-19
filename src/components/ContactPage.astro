@@ -2,20 +2,15 @@
 import Base from "../layouts/Base.astro";
 import HeroShell from "./HeroShell.astro";
 import BottomNav from "./BottomNav.astro";
-import { EmbedFormIsland } from "./EmbedFormIsland";
+import { ShowRequestForm } from "./ShowRequestForm";
 import { site } from "../content/site";
 import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
-import { fetchSiteManifest, resolveFormId } from "../lib/kintana-site";
+import { fetchSiteManifest, endpointSlugFromManifest } from "../lib/kintana-site";
 import "../styles/global.css";
 
-const { apiKey, baseUrl, showRequestFormId } = getKintanaEnv();
+const { apiKey, baseUrl } = getKintanaEnv();
 const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
-const contactFormId = await resolveFormId({
-  kind: "SHOW_REQUEST",
-  manifestKey: "showRequest",
-  manifest,
-  envOverride: showRequestFormId,
-});
+const endpointSlug = endpointSlugFromManifest(manifest, "showRequest", "contact");
 ---
 
 <Base title={`Contact · ${site.artistName}`} description={site.contact.title}>
@@ -48,12 +43,13 @@ const contactFormId = await resolveFormId({
             {
               hasKintanaCredentials() ? (
                 <div class="contact-form">
-                  <EmbedFormIsland
+                  <ShowRequestForm
                     client:load
                     apiKey={apiKey!}
                     baseUrl={baseUrl!}
-                    formId={contactFormId}
-                    kind={contactFormId ? undefined : "SHOW_REQUEST"}
+                    endpointSlug={endpointSlug}
+                    mode="country"
+                    className="contact-form-inner"
                   />
                 </div>
               ) : null

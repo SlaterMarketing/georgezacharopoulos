@@ -5,14 +5,17 @@ import { createKintanaClient } from "@kintana/sdk";
 function loadEnv() {
   const envPath = resolve(process.cwd(), ".env");
   const env = { ...process.env };
-  if (!readFileSync(envPath, "utf8")) return env;
-
-  for (const raw of readFileSync(envPath, "utf8").split(/\r?\n/)) {
-    const line = raw.trim();
-    if (!line || line.startsWith("#")) continue;
-    const eq = line.indexOf("=");
-    if (eq <= 0) continue;
-    env[line.slice(0, eq).trim()] = line.slice(eq + 1).trim();
+  try {
+    const raw = readFileSync(envPath, "utf8");
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eq = trimmed.indexOf("=");
+      if (eq <= 0) continue;
+      env[trimmed.slice(0, eq).trim()] = trimmed.slice(eq + 1).trim();
+    }
+  } catch {
+    /* no .env */
   }
   return env;
 }
@@ -29,16 +32,22 @@ if (!apiKey || !secretApiKey || !baseUrl) {
 
 const client = createKintanaClient({ apiKey, secretApiKey, baseUrl });
 
-const FORMS = [
+const ENDPOINTS = [
   {
     kind: "SHOW_REQUEST",
     title: "Get in touch",
     slug: "contact",
     successMessage: "Thanks — we'll be in touch soon.",
   },
+  {
+    kind: "NEWSLETTER",
+    title: "Mailing list",
+    slug: "newsletter",
+    successMessage: "You're on the list!",
+  },
 ];
 
-async function ensureForm(def) {
+async function ensureEndpoint(def) {
   const existing = await client.listEmbedFormsWorkspace();
   const match = existing.find(
     (f) => f.kind.toUpperCase() === def.kind && f.slug === def.slug,
@@ -49,40 +58,40 @@ async function ensureForm(def) {
       successMessage: def.successMessage,
       active: true,
     });
-    console.log(`${def.kind} form ready: ${match.id}`);
-    return match.id;
+    console.log(`${def.kind} endpoint ready: ${def.slug}`);
+    return;
   }
 
-  const created = await client.createEmbedFormWorkspace({
+  await client.createEmbedFormWorkspace({
     kind: def.kind,
     title: def.title,
     slug: def.slug,
     successMessage: def.successMessage,
     active: true,
+    fieldsJson: [],
   });
 
-  console.log(`Created ${def.kind} form: ${created.id}`);
-  return created.id;
+  console.log(`Created ${def.kind} endpoint: ${def.slug}`);
 }
 
 try {
-  for (const def of FORMS) {
-    await ensureForm(def);
+  for (const def of ENDPOINTS) {
+    await ensureEndpoint(def);
   }
 
-  const publicForms = await client.listForms();
-  console.log("\nActive public forms:");
-  for (const form of publicForms) {
-    console.log(`  ${form.kind} · ${form.slug} · ${form.id}`);
+  const endpoints = await client.listEndpoints();
+  console.log("\nActive endpoints:");
+  for (const endpoint of endpoints) {
+    console.log(`  ${endpoint.intent} · ${endpoint.slug}`);
   }
 
   try {
     const manifest = await client.getSiteManifest();
-    console.log("\nSite manifest forms:", manifest.forms);
-  } catch (error) {
-    console.log("\nSite manifest:", error.message);
+    console.log("\nManifest endpoints:", manifest.endpoints);
+  } catch {
+    /* site-bound key optional */
   }
-} catch (error) {
-  console.error("\nSetup failed:", error.message);
+} catch (err) {
+  console.error(err);
   process.exit(1);
 }

@@ -1,17 +1,12 @@
 ---
-import { EmbedFormIsland } from "./EmbedFormIsland";
+import { NewsletterForm } from "./NewsletterForm";
 import { site } from "../content/site";
 import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
-import { fetchSiteManifest, resolveFormId } from "../lib/kintana-site";
+import { fetchSiteManifest, endpointSlugFromManifest } from "../lib/kintana-site";
 
-const { apiKey, baseUrl, newsletterFormId } = getKintanaEnv();
+const { apiKey, baseUrl } = getKintanaEnv();
 const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
-const formId = await resolveFormId({
-  kind: "NEWSLETTER",
-  manifestKey: "newsletter",
-  manifest,
-  envOverride: newsletterFormId,
-});
+const endpointSlug = endpointSlugFromManifest(manifest, "newsletter", "newsletter");
 ---
 
 <section class="mailing-section" id="mailing">
@@ -25,12 +20,12 @@ const formId = await resolveFormId({
     {
       hasKintanaCredentials() ? (
         <div class="mailing-form">
-          <EmbedFormIsland
+          <NewsletterForm
             client:load
             apiKey={apiKey!}
             baseUrl={baseUrl!}
-            formId={formId}
-            kind={formId ? undefined : "NEWSLETTER"}
+            endpointSlug={endpointSlug}
+            className="mailing-form-inner"
           />
         </div>
       ) : (
