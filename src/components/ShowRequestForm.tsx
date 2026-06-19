@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { KintanaProvider, useKintanaSubmit } from "@kintana/sdk/react";
+import { KintanaProvider, PhoneInput, useKintanaSubmit } from "@kintana/sdk/react";
 
 export type ShowRequestMode = "city" | "country";
 
@@ -91,7 +91,17 @@ function ShowRequestFormFields({
         </label>
         <label>
           Phone
-          <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <PhoneInput
+            value={phone}
+            onChange={setPhone}
+            defaultCountry={
+              mode === "city"
+                ? initialCountry
+                : showCountryField
+                  ? country || initialCountry
+                  : initialCountry
+            }
+          />
         </label>
         {showCountryField ? (
           <label>
