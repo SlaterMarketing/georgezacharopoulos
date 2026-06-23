@@ -1,36 +1,130 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import { site } from "../content/site";
+import type { SoloShowReview } from "../content/site";
 import "../styles/global.css";
+
+function formatStars(count: number) {
+  if (count === 4.5) return "★★★★½";
+  return "★".repeat(Math.round(count));
+}
+
+function reviewLabel(review: SoloShowReview) {
+  return `${formatStars(review.stars)} ${review.source}`;
+}
 ---
 
-<SiteLayout title={`Solo shows · ${site.artistName}`} description={`Solo hours and festival shows from ${site.artistName}.`} headerOverlay={true}>
+<SiteLayout
+  title={`Solo shows · ${site.artistName}`}
+  description={`Solo hours and festival shows from ${site.artistName}.`}
+  headerOverlay={true}
+>
   <section class="page-hero">
     <div class="container">
       <p class="eyebrow light">Solo hours</p>
-      <h1 class="section-title">{site.tagline}</h1>
-      <p class="body-copy">Award-winning solo shows from clubs to fringe festivals.</p>
+      <h1 class="section-title">My solo shows</h1>
+      <p class="body-copy">Award-winning hours from clubs to fringe festivals.</p>
     </div>
   </section>
 
   <section class="page-content">
-    <div class="container page-content--narrow">
-      <ul class="solo-list">
+    <div class="container">
+      <article class="solo-intro">
+        <div class="solo-intro-copy">
+          <h2 class="section-title">{site.soloShowsIntro.title}</h2>
+          {site.soloShowsIntro.paragraphs.map((paragraph) => <p class="body-copy">{paragraph}</p>)}
+        </div>
+        <figure class="solo-intro-photo">
+          <img
+            src={site.soloShowsIntro.image.src}
+            alt={site.soloShowsIntro.image.alt}
+            loading="eager"
+            width="980"
+            height="1466"
+          />
+        </figure>
+      </article>
+
+      <div class="solo-show-list">
         {
-          site.soloShows.map((show) => (
-            <li class="solo-item">
-              <h2>{show.title}</h2>
-              {show.year ? <p class="solo-item-meta">{show.year}</p> : null}
-              <p class="body-copy">{show.body}</p>
-              {show.href ? (
-                <a class="text-link" href={show.href} target="_blank" rel="noopener noreferrer">
-                  Learn more →
-                </a>
-              ) : null}
-            </li>
+          site.soloShows.map((show, index) => (
+            <article class:list={["solo-show", show.image && "solo-show--has-image"]}>
+              <div class="solo-show-layout">
+                {
+                  show.image ? (
+                    <figure class:list={["solo-show-photo", index % 2 === 1 && "solo-show-photo--flip"]}>
+                      <img src={show.image.src} alt={show.image.alt} loading="lazy" width="980" height="1200" />
+                    </figure>
+                  ) : null
+                }
+
+                <div class="solo-show-copy">
+                  <p class="solo-show-year">{show.year}</p>
+                  <h2 class="solo-show-title">{show.title}</h2>
+                  {show.subtitle ? <p class="solo-show-subtitle">{show.subtitle}</p> : null}
+                  <div class="solo-show-body">
+                    {show.paragraphs.map((paragraph) => (
+                      <p class="body-copy">{paragraph}</p>
+                    ))}
+                  </div>
+                  {show.accolade ? <p class="solo-show-accolade">{show.accolade}</p> : null}
+                  {
+                    show.href ? (
+                      <a class="text-link" href={show.href} target="_blank" rel="noopener noreferrer">
+                        Learn more →
+                      </a>
+                    ) : null
+                  }
+
+                  {
+                    show.pressReviews?.length ? (
+                      <section class="solo-show-reviews">
+                        <h3 class="solo-show-reviews-title">Press reviews</h3>
+                        <ul class="quotes-grid">
+                          {
+                            show.pressReviews.map((review) => (
+                              <li class="quote-item">
+                                <blockquote>&ldquo;{review.quote}&rdquo;</blockquote>
+                                {
+                                  review.href ? (
+                                    <a class="quote-source" href={review.href} target="_blank" rel="noopener noreferrer">
+                                      {reviewLabel(review)}
+                                    </a>
+                                  ) : (
+                                    <p class="quote-source">{reviewLabel(review)}</p>
+                                  )
+                                }
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </section>
+                    ) : null
+                  }
+
+                  {
+                    show.audienceReviews?.length ? (
+                      <section class="solo-show-audience">
+                        <h3 class="solo-show-reviews-title">Audience reviews</h3>
+                        <ul class="solo-audience-list">
+                          {
+                            show.audienceReviews.map((review) => (
+                              <li class="solo-audience-item">
+                                <blockquote>&ldquo;{review.quote}&rdquo;</blockquote>
+                                <p class="solo-audience-author">{review.author}</p>
+                              </li>
+                            ))
+                          }
+                        </ul>
+                      </section>
+                    ) : null
+                  }
+                </div>
+              </div>
+            </article>
           ))
         }
-      </ul>
+      </div>
     </div>
   </section>
 </SiteLayout>

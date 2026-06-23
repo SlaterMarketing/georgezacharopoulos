@@ -4,11 +4,28 @@ export type Review = {
   source: string;
 };
 
+export type SoloShowReview = {
+  quote: string;
+  stars: number;
+  source: string;
+  href?: string;
+};
+
+export type SoloShowAudienceReview = {
+  author: string;
+  quote: string;
+};
+
 export type SoloShow = {
   title: string;
-  year?: string;
-  body: string;
+  year: string;
+  subtitle?: string;
+  paragraphs: string[];
+  image?: { src: string; alt: string };
+  accolade?: string;
   href?: string;
+  pressReviews?: SoloShowReview[];
+  audienceReviews?: SoloShowAudienceReview[];
 };
 
 export type GalleryImage = {
@@ -47,27 +64,122 @@ export const site = {
       "Am I funny? Scroll to the gallery and you will see a photo of at least one guy laughing. That photo was on my dating app profile and convinced my now girlfriend to swipe right. So yes — I am a pretty big deal.",
     ],
   },
+  soloShowsIntro: {
+    title: "What is a solo show?",
+    paragraphs: [
+      "Every year since 2015 I create a solo show — a 55–70 minute hour of new material that I take to festivals and on tour around the world. It's a much different vibe to when you see me do twenty minutes at the comedy clubs.",
+      "They mostly tend to have a theme or a story and are centered around that.",
+    ],
+    image: {
+      src: "/solo-shows/intro.jpg",
+      alt: "George Zacharopoulos solo show promotional photo",
+    },
+  },
   soloShows: [
     {
       title: "The Meaning of Life, Maybe",
       year: "2026",
-      body:
+      paragraphs: [
         "Brand new hour. After a year of sold-out shows, an O2 Arena gig, and a proposal, everything went to shit. A heartwarming, hilarious show about how joy survives when your world collapses.",
+      ],
     },
     {
       title: "The Butterfly Effect",
       year: "2025",
-      body: "Greek Comedian of the Year show — sharp storytelling about cause, chaos, and accidentally becoming an adult.",
+      paragraphs: [
+        "Greek Comedian of the Year show — sharp storytelling about cause, chaos, and accidentally becoming an adult.",
+      ],
     },
     {
       title: "Greek in the Sheets",
       year: "2024",
-      body: "Personal, filthy, and very Greek.",
+      paragraphs: [
+        "In 2024, I turned 40. It hit me like a ton of bricks as I have already been afraid of dying from a very young age. I realised all my life I have been avoiding getting older by trying to live with zero stress, next to no responsibilities and very spontaneously.",
+        "That culminated in me getting detained in Australia at 1 am in the city centre on charges of terrorism and espionage.",
+      ],
+      image: {
+        src: "/solo-shows/greek-in-the-sheets.jpg",
+        alt: "George Zacharopoulos — Greek in the Sheets",
+      },
+      pressReviews: [
+        {
+          quote:
+            "George remains one of the best comedians you'll see at the Fringe. Other comedians are clever, other comedians are funny. George is both.",
+          stars: 4.5,
+          source: "The Quintessential Review",
+          href: "https://theqr.co.uk/2024/08/08/edfringe-review-2024-greek-comedian-of-the-year-greek-in-the-sheets-george-zacharopoulos/",
+        },
+        {
+          quote: "Some comedians think they are legends. But George Zacharopoulos is the real deal.",
+          stars: 5,
+          source: "Theatre Vibe",
+          href: "https://theatrevibe.co.uk/2024/08/20/review-just-the-tonic-legends-greek-in-the-sheets-edinburgh-fringe-2024/",
+        },
+      ],
+      audienceReviews: [
+        {
+          author: "Basma",
+          quote: "Really enjoyed this, highly recommend!",
+        },
+        {
+          author: "Lisa Chappell",
+          quote:
+            "We've seen George three times and he just gets better over time. Hilarious (and true) reflections on life. This show is a real treat every year.",
+        },
+        {
+          author: "Katie Marsden",
+          quote:
+            "George flyered us yesterday himself. He was very gentle in his approach. We gave him a chance and oh my, what a treat. This was an Edinburgh highlight. He should be full every night and not need to flyer himself. An astonishing show. We will come back next year!",
+        },
+        {
+          author: "Michael Foster",
+          quote:
+            "I just saw George and came to create an account to say what a fantastic show all of us experienced today. He seems to be relatively unknown but many people in the room came because they had seen him before. George was absolutely fantastic. The applause at the end was deafening. We will definitely see him again. What a hidden gem, thank you.",
+        },
+      ],
+    },
+    {
+      title: "50/50",
+      year: "2024",
+      paragraphs: [
+        "This year I also decided to do a show called 50/50 — basically me doing stand-up for 30 minutes followed by improvisation based on audience suggestions.",
+        "Very silly, really fun.",
+      ],
+      image: {
+        src: "/solo-shows/fifty-fifty.jpg",
+        alt: "George Zacharopoulos — 50/50",
+      },
     },
     {
       title: "Wonderland",
       year: "2023",
-      body: "Edinburgh Fringe hour — absurd adventures through George's upside-down world.",
+      subtitle: "Also: The Right Swipe That Ruined My Life · Honeybadger",
+      paragraphs: [
+        "This show has two titles, depending on where it was performed. It appeared in Edinburgh Fringe as Wonderland, Melbourne Comedy Festival as Honeybadger, and Perth Comedy Festival as The Right Swipe That Ruined My Life.",
+        "It is a wild, outlandish and yet 100% true story about falling in love with the wrong person.",
+      ],
+      accolade: "Top 50 best reviewed shows — British Comedy Guide, Edinburgh Fringe 2023",
+      pressReviews: [
+        {
+          quote:
+            "Very funny, and utterly surprising. Go see Wonderland before it leaves town. It is, without question, one of the best hours of comedy on offer this August.",
+          stars: 5,
+          source: "The Quintessential Review",
+          href: "https://theqr.co.uk/2023/08/25/edfringe-review-george-zacharopoulos-wonderland/",
+        },
+        {
+          quote: "He delivers this with such a wicked sense of humour that you will ache from laughing so hard.",
+          stars: 5,
+          source: "The Reviews Hub",
+          href: "https://www.thereviewshub.com/george-zacharopoulos-wonderland-edinburgh-fringe-2023pleasance-dome/",
+        },
+        {
+          quote: "This is disarmingly honest, heart on sleeve, brilliant, funny story telling.",
+          stars: 4,
+          source: "One4Review",
+          href: "https://one4review.co.uk/2023/08/george-zacharopoulos-wonderland-5/",
+        },
+      ],
     },
   ] satisfies SoloShow[],
   reviews: [
