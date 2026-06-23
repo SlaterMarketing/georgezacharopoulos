@@ -1,15 +1,150 @@
 ---
-import Base from "../layouts/Base.astro";
-import HeroShell from "./HeroShell.astro";
-import BottomNav from "./BottomNav.astro";
+import SiteLayout from "./SiteLayout.astro";
+import GigsList from "./GigsList.astro";
+import PressQuotes from "./PressQuotes.astro";
+import SocialIcon from "./SocialIcon.astro";
 import { site } from "../content/site";
+import { createKintanaClientFromEnv, hasKintanaCredentials } from "../lib/kintana-env";
+import { reserveTicketHref } from "../lib/events";
+import type { KintanaPublicEvent } from "@kintana/sdk";
 import "../styles/global.css";
+
+let events: KintanaPublicEvent[] = [];
+
+if (hasKintanaCredentials()) {
+  try {
+    events = await createKintanaClientFromEnv().listEvents({ limit: 50 });
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error("[georgezacharopoulos] listEvents failed:", error);
+    }
+  }
+}
+
+const nextShowHref = reserveTicketHref(events);
+const previewEvents = events.slice(0, 4);
+const featuredShow = site.soloShows[0];
+const galleryPreview = site.gallery.images.slice(0, 4);
 ---
 
-<Base title={`${site.artistName} · Comedian`} description={site.description}>
-  <main class="page-main">
-    <HeroShell showTitle={true}>
-      <BottomNav currentPath="/" />
-    </HeroShell>
-  </main>
-</Base>
+<SiteLayout
+  title={`${site.artistName} · ${site.tagline}`}
+  description={site.description}
+  headerOverlay={true}
+  nextShowHref={nextShowHref}
+>
+  <section class="home-hero">
+    <picture class="home-hero-media">
+      <source media="(min-width: 768px)" srcset={site.heroImage} />
+      <img src={site.heroImageMobile} alt={site.heroImageAlt} width="1200" height="1400" fetchpriority="high" />
+    </picture>
+    <div class="home-hero-shade" aria-hidden="true"></div>
+
+    <div class="container home-hero-content">
+      <p class="eyebrow">{site.heroEyebrow}</p>
+      <h1 class="home-title">{site.artistName}</h1>
+      <p class="home-alias">Also known as {site.alsoKnownAs}</p>
+      <p class="home-lede">{site.homeIntro}</p>
+
+      <ul class="credit-strip" aria-label="Highlights">
+        {site.credits.map((item) => <li>{item}</li>)}
+      </ul>
+
+      <div class="home-hero-actions">
+        <a class="btn btn-primary" href={nextShowHref ?? "/shows/"}>
+          {nextShowHref ? "Get tickets" : "See gigs"}
+        </a>
+        <a class="btn btn-secondary" href="/bio/">Read bio</a>
+      </div>
+
+      <div class="home-social" aria-label="Social links">
+        {
+          site.social.map((link) => (
+            <SocialIcon platform={link.platform} href={link.href} label={link.label} size="md" />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="home-band home-band--quote">
+    <div class="container">
+      <PressQuotes reviews={site.reviews} featured={true} />
+    </div>
+  </section>
+
+  <section class="home-band" id="gigs">
+    <div class="container home-split-head">
+      <div>
+        <p class="eyebrow">Live dates</p>
+        <h2 class="section-title">{site.showsHeading}</h2>
+      </div>
+      <a class="text-link" href="/shows/">All gigs →</a>
+    </div>
+    <div class="container">
+      <GigsList events={previewEvents} showHeading={false} compact={true} />
+    </div>
+  </section>
+
+  <section class="home-band home-band--warm">
+    <div class="container home-solo-spotlight">
+      <div>
+        <p class="eyebrow">Current solo hour</p>
+        <h2 class="section-title">{featuredShow.title}</h2>
+        {featuredShow.year ? <p class="solo-year">{featuredShow.year}</p> : null}
+        <p class="body-copy">{featuredShow.body}</p>
+        <a class="text-link" href="/solo-shows/">More solo shows →</a>
+      </div>
+      <div class="award-stack" aria-label="Awards">
+        {
+          site.awards.map((award) => (
+            <p class="award-line">{award}</p>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="home-band">
+    <div class="container home-about-teaser">
+      <div>
+        <p class="eyebrow">About George</p>
+        <h2 class="section-title">From Kalamata to the O2</h2>
+        <p class="body-copy">{site.about.paragraphs[1]}</p>
+        <a class="text-link" href="/bio/">Full bio →</a>
+      </div>
+      <blockquote class="bio-aside">
+        &ldquo;{site.about.paragraphs[3]}&rdquo;
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="home-band home-band--dark">
+    <div class="container home-split-head">
+      <div>
+        <p class="eyebrow light">On stage</p>
+        <h2 class="section-title light">{site.gallery.title}</h2>
+      </div>
+      <a class="text-link light" href="/gallery/">Full gallery →</a>
+    </div>
+    <div class="container gallery-preview">
+      {
+        galleryPreview.map((image, index) => (
+          <figure class:list={["gallery-preview-item", index === 0 && "gallery-preview-item--lead"]}>
+            <img src={image.src} alt={image.alt} loading={index < 2 ? "eager" : "lazy"} decoding="async" />
+          </figure>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="home-band home-cta">
+    <div class="container home-cta-inner">
+      <div>
+        <h2 class="section-title">Book George for your club, festival, or crisis.</h2>
+        <p class="body-copy">Bookings, press, or a question about how to pronounce Zacharopoulos.</p>
+      </div>
+      <a class="btn btn-primary" href="/contact/">Get in touch</a>
+    </div>
+  </section>
+</SiteLayout>

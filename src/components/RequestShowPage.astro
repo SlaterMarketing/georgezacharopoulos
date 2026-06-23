@@ -1,7 +1,5 @@
 ---
-import Base from "../layouts/Base.astro";
-import HeroShell from "./HeroShell.astro";
-import BottomNav from "./BottomNav.astro";
+import SiteLayout from "./SiteLayout.astro";
 import { ShowRequestForm } from "./ShowRequestForm";
 import { site } from "../content/site";
 import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
@@ -13,35 +11,33 @@ const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
 const endpointSlug = endpointSlugFromManifest(manifest, "showRequest", "contact");
 ---
 
-<Base title={`Request a show · ${site.artistName}`} description={`Request ${site.artistName} in your city.`}>
-  <main class="page-main">
-    <HeroShell scrollable={true}>
-      <div class="page-panel">
-        <div class="page-panel-inner">
-          <h1 class="page-heading">Your city</h1>
-          <p class="page-lede">
-            Want George in your town? Tell us where — we&apos;ll reach out when routing makes sense.
-          </p>
+<SiteLayout title={`Request a show · ${site.artistName}`} description={`Request ${site.artistName} in your city.`}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow light">Your city</p>
+      <h1 class="section-title">Bring George to your town</h1>
+      <p class="body-copy">Tell us where you are — we&apos;ll reach out when routing makes sense.</p>
+    </div>
+  </section>
 
-          {
-            hasKintanaCredentials() ? (
-              <div class="contact-form" style="margin-top: 2rem;">
-                <ShowRequestForm
-                  client:load
-                  apiKey={apiKey!}
-                  baseUrl={baseUrl!}
-                  endpointSlug={endpointSlug}
-                  mode="country"
-                  className="contact-form-inner"
-                />
-              </div>
-            ) : (
-              <p class="shows-empty" style="margin-top: 2rem;">Request form will appear here once connected.</p>
-            )
-          }
-        </div>
-      </div>
-      <BottomNav currentPath="/request-a-show/" />
-    </HeroShell>
-  </main>
-</Base>
+  <section class="page-content">
+    <div class="container page-content--narrow">
+      {
+        hasKintanaCredentials() ? (
+          <div class="contact-form-panel">
+            <ShowRequestForm
+              client:load
+              apiKey={apiKey!}
+              baseUrl={baseUrl!}
+              endpointSlug={endpointSlug}
+              mode="country"
+              className="contact-form-inner"
+            />
+          </div>
+        ) : (
+          <p class="muted">Request form will appear here once Kintana is connected.</p>
+        )
+      }
+    </div>
+  </section>
+</SiteLayout>

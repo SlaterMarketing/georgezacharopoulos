@@ -1,0 +1,38 @@
+---
+import type { Review } from "../content/site";
+
+interface Props {
+  reviews: readonly Review[];
+  featured?: boolean;
+}
+
+const { reviews, featured = false } = Astro.props;
+
+function stars(count: number) {
+  return "★".repeat(count);
+}
+---
+
+{
+  featured ? (
+    <figure class="quote-featured">
+      <blockquote>&ldquo;{reviews[0]?.quote}&rdquo;</blockquote>
+      <figcaption>
+        {stars(reviews[0]?.stars ?? 5)} {reviews[0]?.source}
+      </figcaption>
+    </figure>
+  ) : (
+    <ul class="quotes-grid">
+      {
+        reviews.map((review) => (
+          <li class="quote-item">
+            {review.quote ? <blockquote>&ldquo;{review.quote}&rdquo;</blockquote> : null}
+            <p class="quote-source">
+              {stars(review.stars)} {review.source}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  )
+}

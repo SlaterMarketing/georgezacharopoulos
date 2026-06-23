@@ -1,10 +1,9 @@
 ---
-import Base from "../layouts/Base.astro";
-import HeroShell from "./HeroShell.astro";
-import BottomNav from "./BottomNav.astro";
-import ShowsSection from "./ShowsSection.astro";
+import SiteLayout from "./SiteLayout.astro";
+import GigsList from "./GigsList.astro";
 import { site } from "../content/site";
 import { createKintanaClientFromEnv, hasKintanaCredentials } from "../lib/kintana-env";
+import { reserveTicketHref } from "../lib/events";
 import type { KintanaPublicEvent } from "@kintana/sdk";
 import "../styles/global.css";
 
@@ -21,15 +20,22 @@ if (hasKintanaCredentials()) {
 }
 ---
 
-<Base title={`Tickets · ${site.artistName}`} description={site.showsHeading}>
-  <main class="page-main">
-    <HeroShell scrollable={true}>
-      <div class="page-panel">
-        <div class="page-panel-inner">
-          <ShowsSection events={events} />
-        </div>
-      </div>
-      <BottomNav currentPath="/shows/" />
-    </HeroShell>
-  </main>
-</Base>
+<SiteLayout
+  title={`Gigs · ${site.artistName}`}
+  description={site.showsHeading}
+  nextShowHref={reserveTicketHref(events)}
+>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow light">Live dates</p>
+      <h1 class="section-title">{site.showsHeading}</h1>
+      <p class="body-copy">Catch George live across the UK, Europe, Dubai, and Australia.</p>
+    </div>
+  </section>
+
+  <section class="page-content">
+    <div class="container">
+      <GigsList events={events} showHeading={false} />
+    </div>
+  </section>
+</SiteLayout>

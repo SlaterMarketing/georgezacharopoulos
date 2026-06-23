@@ -1,40 +1,22 @@
 ---
-import Base from "../layouts/Base.astro";
-import HeroShell from "./HeroShell.astro";
-import BottomNav from "./BottomNav.astro";
+import SiteLayout from "./SiteLayout.astro";
+import PressQuotes from "./PressQuotes.astro";
 import { site } from "../content/site";
 import "../styles/global.css";
-
-function stars(count: number) {
-  return "★".repeat(count);
-}
 ---
 
-<Base title={`Press · ${site.artistName}`} description={`Press quotes and reviews for ${site.artistName}.`}>
-  <main class="page-main">
-    <HeroShell scrollable={true}>
-      <div class="page-panel">
-        <div class="page-panel-inner">
-          <h1 class="page-heading">Press</h1>
-          <p class="page-lede">What critics and festival reviewers have said.</p>
+<SiteLayout title={`Press · ${site.artistName}`} description={`Press quotes and reviews for ${site.artistName}.`}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow light">Reviews</p>
+      <h1 class="section-title">Press quotes</h1>
+      <p class="body-copy">What critics and festival reviewers have said.</p>
+    </div>
+  </section>
 
-          <ul class="reviews-list reviews-list--full">
-            {
-              site.reviews.map((review) => (
-                <li class="review-card">
-                  {review.quote ? (
-                    <blockquote>&ldquo;{review.quote}&rdquo;</blockquote>
-                  ) : null}
-                  <p class="review-meta">
-                    {stars(review.stars)} {review.source}
-                  </p>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-      <BottomNav currentPath="/press/" />
-    </HeroShell>
-  </main>
-</Base>
+  <section class="page-content">
+    <div class="container">
+      <PressQuotes reviews={site.reviews} />
+    </div>
+  </section>
+</SiteLayout>

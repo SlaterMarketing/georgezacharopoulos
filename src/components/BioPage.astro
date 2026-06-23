@@ -1,56 +1,35 @@
 ---
-import Base from "../layouts/Base.astro";
-import HeroShell from "./HeroShell.astro";
-import BottomNav from "./BottomNav.astro";
+import SiteLayout from "./SiteLayout.astro";
 import { site } from "../content/site";
 import "../styles/global.css";
-
-function stars(count: number) {
-  return "★".repeat(count);
-}
 ---
 
-<Base title={`Bio · ${site.artistName}`} description={site.description}>
-  <main class="page-main">
-    <HeroShell scrollable={true}>
-      <div class="page-panel">
-        <div class="page-panel-inner">
-          <h1 class="page-heading">Bio</h1>
-          <div class="bio-prose">
-            {site.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
-          </div>
+<SiteLayout title={`Bio · ${site.artistName}`} description={site.description}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow light">About</p>
+      <h1 class="section-title">From Kalamata to headline clubs</h1>
+      <p class="body-copy">Also known as {site.alsoKnownAs} — when British comperes give up on the surname.</p>
+    </div>
+  </section>
 
-          <section class="awards-section">
-            <h2 class="section-heading">Awards</h2>
-            <ul class="awards-list">
-              {site.awards.map((award) => <li>{award}</li>)}
-            </ul>
-          </section>
+  <section class="page-content">
+    <div class="container bio-layout">
+      <figure class="bio-portrait">
+        <img src="/gallery/01.webp" alt="George Zacharopoulos performing stand-up" loading="eager" />
+        <figcaption>Photo from the dating-app era. It worked.</figcaption>
+      </figure>
 
-          <section class="reviews-section">
-            <h2 class="section-heading">Press</h2>
-            <ul class="reviews-list">
-              {
-                site.reviews.slice(0, 3).map((review) => (
-                  <li>
-                    {review.quote ? (
-                      <>
-                        &lsquo;{review.quote}&rsquo; {stars(review.stars)} {review.source}
-                      </>
-                    ) : (
-                      <>
-                        {stars(review.stars)} {review.source}
-                      </>
-                    )}
-                  </li>
-                ))
-              }
-            </ul>
-            <a class="text-link" href="/press/">All press quotes →</a>
-          </section>
+      <div class="bio-copy prose">
+        {site.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+
+        <div class="awards-block">
+          <h2 class="section-title">Awards</h2>
+          <ul>
+            {site.awards.map((award) => <li>{award}</li>)}
+          </ul>
         </div>
       </div>
-      <BottomNav currentPath="/bio/" />
-    </HeroShell>
-  </main>
-</Base>
+    </div>
+  </section>
+</SiteLayout>

@@ -6,6 +6,7 @@ export type Review = {
 
 export type SoloShow = {
   title: string;
+  year?: string;
   body: string;
   href?: string;
 };
@@ -17,14 +18,23 @@ export type GalleryImage = {
 
 export const site = {
   artistName: "George Zacharopoulos",
+  alsoKnownAs: "George Zach",
   siteName: "georgezacharopoulos.com",
   tagline: "Greek Comedian of the Year",
+  heroEyebrow: "One of Europe's rising stars",
   description:
-    "George Zacharopoulos — Greek stand-up comedian, storyteller, and one of Europe's rising stars. Upcoming gigs across the UK, Europe, Dubai, and Australia.",
+    "George Zacharopoulos — Greek stand-up comedian and storyteller. Upcoming gigs across the UK, Europe, Dubai, and Australia.",
   heroImage: "/hero.webp",
   heroImageMobile: "/hero-mobile.webp",
   heroImageAlt: "George Zacharopoulos on stage",
-  heroTitleLines: ["George", "Zacharopoulos"],
+  homeIntro:
+    "Born in Kalamata, Greece — a land of olives and debt — now headlining clubs across the UK, Europe, Dubai, and Australia. Storytelling comedy about immigration, identity, and pretending your life is together.",
+  credits: [
+    "Jim Jefferies tour support",
+    "BBC One",
+    "Edinburgh Fringe",
+    "London O2 Arena",
+  ],
   bookingsEmail: "bookings@georgezacharopoulos.com",
   email: "hello@georgezacharopoulos.com",
   showsHeading: "Upcoming gigs",
@@ -40,19 +50,23 @@ export const site = {
   soloShows: [
     {
       title: "The Meaning of Life, Maybe",
+      year: "2026",
       body:
-        "Brand new hour for 2026. After a year of sold-out shows, an O2 Arena gig, and a proposal, everything went to shit. A heartwarming, hilarious show about how joy survives when your world collapses.",
+        "Brand new hour. After a year of sold-out shows, an O2 Arena gig, and a proposal, everything went to shit. A heartwarming, hilarious show about how joy survives when your world collapses.",
     },
     {
       title: "The Butterfly Effect",
-      body: "2025 Greek Comedian of the Year show — sharp storytelling about cause, chaos, and accidentally becoming an adult.",
+      year: "2025",
+      body: "Greek Comedian of the Year show — sharp storytelling about cause, chaos, and accidentally becoming an adult.",
     },
     {
       title: "Greek in the Sheets",
-      body: "2024 Greek Comedian of the Year hour — personal, filthy, and very Greek.",
+      year: "2024",
+      body: "Personal, filthy, and very Greek.",
     },
     {
       title: "Wonderland",
+      year: "2023",
       body: "Edinburgh Fringe hour — absurd adventures through George's upside-down world.",
     },
   ] satisfies SoloShow[],
@@ -80,8 +94,8 @@ export const site = {
     ] satisfies GalleryImage[],
   },
   contact: {
-    title: "Contact",
-    body: "Bookings, press, or just saying hi — reach out below.",
+    title: "Get in touch",
+    body: "Bookings, press, or just saying hi — drop a line below.",
   },
   nav: [
     { label: "Gigs", href: "/shows/" },
@@ -89,7 +103,6 @@ export const site = {
     { label: "Press", href: "/press/" },
     { label: "Gallery", href: "/gallery/" },
     { label: "Bio", href: "/bio/" },
-    { label: "Contact", href: "/contact/" },
   ],
   social: [
     { label: "Instagram", href: "https://www.instagram.com/greekcomedian", platform: "instagram" as const },

@@ -1,7 +1,5 @@
 ---
-import Base from "../layouts/Base.astro";
-import HeroShell from "./HeroShell.astro";
-import BottomNav from "./BottomNav.astro";
+import SiteLayout from "./SiteLayout.astro";
 import { ShowRequestForm } from "./ShowRequestForm";
 import { site } from "../content/site";
 import { getKintanaEnv, hasKintanaCredentials } from "../lib/kintana-env";
@@ -13,58 +11,44 @@ const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
 const endpointSlug = endpointSlugFromManifest(manifest, "showRequest", "contact");
 ---
 
-<Base title={`Contact · ${site.artistName}`} description={site.contact.title}>
-  <main class="page-main">
-    <HeroShell scrollable={true}>
-      <div class="page-panel">
-        <div class="page-panel-inner">
-          <h1 class="page-heading">{site.contact.title}</h1>
-          <p class="page-lede">{site.contact.body}</p>
+<SiteLayout title={`Contact · ${site.artistName}`} description={site.contact.body}>
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow light">Contact</p>
+      <h1 class="section-title">{site.contact.title}</h1>
+      <p class="body-copy">{site.contact.body}</p>
+    </div>
+  </section>
 
-          <div class="contact-grid">
-            <div class="contact-lines">
-              <div class="contact-block">
-                <p class="contact-label">Bookings</p>
-                <a class="contact-value" href={`mailto:${site.bookingsEmail}`}>{site.bookingsEmail}</a>
-              </div>
-              <div class="contact-block">
-                <p class="contact-label">General</p>
-                <a class="contact-value" href={`mailto:${site.email}`}>{site.email}</a>
-              </div>
-              <div class="social-row">
-                {
-                  site.social.map((link) => (
-                    <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
-                  ))
-                }
-              </div>
-            </div>
-
-            {
-              hasKintanaCredentials() ? (
-                <div class="contact-form">
-                  <ShowRequestForm
-                    client:load
-                    apiKey={apiKey!}
-                    baseUrl={baseUrl!}
-                    endpointSlug={endpointSlug}
-                    mode="country"
-                    className="contact-form-inner"
-                  />
-                </div>
-              ) : null
-            }
-          </div>
-
-          <p class="page-footer-note">
-            {site.footerCredit.prefix}
-            <a href={site.footerCredit.href} target="_blank" rel="noopener noreferrer">
-              {site.footerCredit.label}
-            </a>
-          </p>
+  <section class="page-content">
+    <div class="container contact-layout">
+      <div class="contact-lines">
+        <div>
+          <p class="contact-label">Bookings</p>
+          <a class="contact-value" href={`mailto:${site.bookingsEmail}`}>{site.bookingsEmail}</a>
+        </div>
+        <div>
+          <p class="contact-label">General</p>
+          <a class="contact-value" href={`mailto:${site.email}`}>{site.email}</a>
         </div>
       </div>
-      <BottomNav currentPath="/contact/" />
-    </HeroShell>
-  </main>
-</Base>
+
+      {
+        hasKintanaCredentials() ? (
+          <div class="contact-form-panel">
+            <ShowRequestForm
+              client:load
+              apiKey={apiKey!}
+              baseUrl={baseUrl!}
+              endpointSlug={endpointSlug}
+              mode="country"
+              className="contact-form-inner"
+            />
+          </div>
+        ) : (
+          <p class="muted">Contact form will appear here once Kintana is connected.</p>
+        )
+      }
+    </div>
+  </section>
+</SiteLayout>
