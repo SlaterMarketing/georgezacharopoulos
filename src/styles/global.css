@@ -191,11 +191,18 @@ a {
   background: linear-gradient(180deg, rgba(18, 24, 32, 0.72) 0%, rgba(18, 24, 32, 0) 100%);
 }
 
+.site-header--overlay:not(.is-scrolled) .site-logo {
+  color: var(--white);
+}
+
 .site-header--overlay:not(.is-scrolled) .site-logo-name,
-.site-header--overlay:not(.is-scrolled) .site-logo-tag,
 .site-header--overlay:not(.is-scrolled) .nav-link,
 .site-header--overlay:not(.is-scrolled) .menu-toggle span {
   color: var(--white);
+}
+
+.site-header--overlay:not(.is-scrolled) .site-logo-tag {
+  color: var(--accent);
 }
 
 .site-header--overlay:not(.is-scrolled) .menu-toggle {

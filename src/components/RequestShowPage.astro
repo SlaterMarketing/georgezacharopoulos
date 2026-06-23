@@ -11,7 +11,7 @@ const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
 const endpointSlug = endpointSlugFromManifest(manifest, "showRequest", "contact");
 ---
 
-<SiteLayout title={`Request a show · ${site.artistName}`} description={`Request ${site.artistName} in your city.`}>
+<SiteLayout title={`Request a show · ${site.artistName}`} description={`Request ${site.artistName} in your city.`} headerOverlay={true}>
   <section class="page-hero">
     <div class="container">
       <p class="eyebrow light">Your city</p>
