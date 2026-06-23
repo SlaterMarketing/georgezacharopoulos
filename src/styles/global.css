@@ -196,7 +196,6 @@ a {
 }
 
 .site-header--overlay:not(.is-scrolled) .site-logo-name,
-.site-header--overlay:not(.is-scrolled) .nav-link,
 .site-header--overlay:not(.is-scrolled) .menu-toggle span {
   color: var(--white);
 }
@@ -209,15 +208,26 @@ a {
   border-color: rgba(255, 255, 255, 0.35);
 }
 
-.site-header--overlay:not(.is-scrolled) .btn-secondary {
-  color: var(--white);
-  border-color: rgba(255, 255, 255, 0.35);
+@media (min-width: 960px) {
+  .site-header--overlay:not(.is-scrolled) .nav-link {
+    color: var(--white);
+  }
+
+  .site-header--overlay:not(.is-scrolled) .btn-secondary {
+    color: var(--white);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
 }
 
 .site-header.is-scrolled {
   background: rgba(243, 236, 225, 0.94);
-  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 960px) {
+  .site-header.is-scrolled {
+    backdrop-filter: blur(12px);
+  }
 }
 
 .site-header-inner {
@@ -226,6 +236,21 @@ a {
   justify-content: space-between;
   gap: 1rem;
   min-height: 4.75rem;
+}
+
+@media (min-width: 960px) {
+  .site-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    min-height: 4.75rem;
+  }
+
+  .site-header-inner {
+    min-height: 0;
+    flex-shrink: 0;
+  }
 }
 
 .site-logo {
@@ -303,21 +328,32 @@ a {
   .site-header-nav {
     position: fixed;
     inset: 4.75rem 0 0;
-    display: flex;
+    z-index: 60;
+    display: none;
     flex-direction: column;
     gap: 2rem;
     padding: 2rem var(--pad);
     background: var(--paper);
-    transform: translateY(-110%);
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .site-header-nav.is-open {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
+    display: flex;
+  }
+
+  .site-header-nav .nav-link {
+    color: var(--ink);
+  }
+
+  .site-header-nav .nav-link:hover,
+  .site-header-nav .nav-link.is-active {
+    color: var(--accent);
+  }
+
+  .site-header-nav .btn-secondary {
+    color: var(--ink);
+    border-color: var(--line);
   }
 
   .site-nav {

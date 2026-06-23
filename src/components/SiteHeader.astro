@@ -16,23 +16,25 @@ function isActive(href: string) {
 ---
 
 <header class:list={["site-header", overlay && "site-header--overlay"]} data-site-header>
-  <div class="container site-header-inner">
-    <a class="site-logo" href="/">
-      <span class="site-logo-name">{site.artistName}</span>
-      <span class="site-logo-tag">{site.tagline}</span>
-    </a>
+  <div class="container site-header-bar">
+    <div class="site-header-inner">
+      <a class="site-logo" href="/">
+        <span class="site-logo-name">{site.artistName}</span>
+        <span class="site-logo-tag">{site.tagline}</span>
+      </a>
 
-    <button
-      type="button"
-      class="menu-toggle"
-      aria-expanded="false"
-      aria-controls="mobile-nav"
-      data-menu-toggle
-    >
-      <span></span>
-      <span></span>
-      <span class="sr-only">Menu</span>
-    </button>
+      <button
+        type="button"
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-toggle
+      >
+        <span></span>
+        <span></span>
+        <span class="sr-only">Menu</span>
+      </button>
+    </div>
 
     <div class="site-header-nav" id="mobile-nav" data-mobile-panel>
       <nav class="site-nav" aria-label="Primary">
