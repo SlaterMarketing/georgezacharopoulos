@@ -30,7 +30,7 @@ if (hasKintanaCredentials() && slug) {
     event = await createKintanaClientFromEnv().getEvent(slug);
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error("[michaeljbevan] getEvent failed:", error);
+      console.error("[georgezacharopoulos] getEvent failed:", error);
     }
   }
 }

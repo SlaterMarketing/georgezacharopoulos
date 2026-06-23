@@ -1,0 +1,31 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroShell from "./HeroShell.astro";
+import BottomNav from "./BottomNav.astro";
+import { site } from "../content/site";
+import "../styles/global.css";
+---
+
+<Base title={`Gallery · ${site.artistName}`} description={`Photos from ${site.artistName}'s live shows and festivals.`}>
+  <main class="page-main">
+    <HeroShell scrollable={true}>
+      <div class="page-panel">
+        <div class="page-panel-inner">
+          <h1 class="page-heading">{site.gallery.title}</h1>
+          <p class="page-lede">Live shots from clubs, festivals, and rooms that survived the experience.</p>
+
+          <ul class="gallery-grid">
+            {
+              site.gallery.images.map((image, index) => (
+                <li class:list={["gallery-item", index === 0 && "gallery-item--feature"]}>
+                  <img src={image.src} alt={image.alt} loading={index < 2 ? "eager" : "lazy"} decoding="async" />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <BottomNav currentPath="/gallery/" />
+    </HeroShell>
+  </main>
+</Base>

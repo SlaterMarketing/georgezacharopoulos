@@ -15,7 +15,7 @@ if (hasKintanaCredentials()) {
     events = await createKintanaClientFromEnv().listEvents({ limit: 50 });
   } catch (error) {
     if (import.meta.env.DEV) {
-      console.error("[michaeljbevan] listEvents failed:", error);
+      console.error("[georgezacharopoulos] listEvents failed:", error);
     }
   }
 }

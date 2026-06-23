@@ -13,14 +13,14 @@ const manifest = hasKintanaCredentials() ? await fetchSiteManifest() : null;
 const endpointSlug = endpointSlugFromManifest(manifest, "showRequest", "contact");
 ---
 
-<Base title={`Request a show · ${site.artistName}`} description="Request Michael Bevan in your city.">
+<Base title={`Request a show · ${site.artistName}`} description={`Request ${site.artistName} in your city.`}>
   <main class="page-main">
     <HeroShell scrollable={true}>
       <div class="page-panel">
         <div class="page-panel-inner">
           <h1 class="page-heading">Your city</h1>
           <p class="page-lede">
-            Want Michael in your town? Tell us where — we'll reach out when routing makes sense.
+            Want George in your town? Tell us where — we&apos;ll reach out when routing makes sense.
           </p>
 
           {

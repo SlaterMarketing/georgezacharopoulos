@@ -17,8 +17,10 @@ const { showTitle = false, scrollable = false } = Astro.props;
   {
     showTitle ? (
       <div class="hero-title-lockup" aria-hidden="true">
-        <span class="hero-title-line">Michael</span>
-        <span class="hero-title-line">Bevan</span>
+        {site.heroTitleLines.map((line) => (
+          <span class="hero-title-line">{line}</span>
+        ))}
+        <span class="hero-tagline">{site.tagline}</span>
       </div>
     ) : null
   }

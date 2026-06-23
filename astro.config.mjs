@@ -4,7 +4,7 @@ import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: process.env.PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.michaeljbevan.com",
+  site: process.env.PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://www.georgezacharopoulos.com",
   output: "server",
   adapter: cloudflare({
     platformProxy: {
