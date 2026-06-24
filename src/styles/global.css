@@ -666,16 +666,27 @@ a {
 
 @media (min-width: 768px) {
   .gig-row {
-    grid-template-columns: 9rem 1fr auto;
+    grid-template-columns: 10.5rem 1fr auto;
   }
 }
 
 .gig-date {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
+}
+
+.gig-date-time {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--accent);
 }
 
 .gig-name {
@@ -1102,6 +1113,53 @@ a.quote-source:hover {
   background: var(--paper);
 }
 
+.contact-form-panel label {
+  display: grid;
+  gap: 0.35rem;
+  font: inherit;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.contact-form-panel .kintana-phone-field {
+  --kintana-phone-border: var(--line);
+  --kintana-phone-focus: var(--accent);
+  width: 100%;
+  min-width: 0;
+}
+
+.contact-form-panel .kintana-phone-field > div {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  background: var(--paper) !important;
+  box-shadow: none !important;
+}
+
+.contact-form-panel .kintana-phone-field > div:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px var(--accent) !important;
+}
+
+.contact-form-panel .kintana-phone-field input[type="tel"] {
+  padding: 0.75rem 0.85rem 0.75rem 0 !important;
+  font: inherit !important;
+  color: var(--ink) !important;
+}
+
+.contact-form-panel .kintana-phone-field span[aria-hidden="true"] {
+  font: inherit !important;
+  color: var(--ink-soft) !important;
+}
+
 .contact-form-panel :is(button, [type="submit"]) {
   margin-top: 0.75rem;
   padding: 0.75rem 1.25rem;
@@ -1215,6 +1273,55 @@ a.quote-source:hover {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--white);
+}
+
+.ticket-widget-wrap {
+  margin-top: 0.25rem;
+}
+
+.ticket-widget {
+  min-height: 28rem;
+  overflow: hidden;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.ticket-widget:has(iframe) + .ticket-widget-loading {
+  display: none;
+}
+
+.ticket-widget-loading {
+  margin: 0.75rem 0 0;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.ticket-widget-fallback {
+  margin: 0.75rem 0 0;
+}
+
+.show-ticket-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--white);
+  background: var(--accent);
+  border-radius: var(--radius);
+}
+
+.show-ticket-link:hover {
+  background: var(--accent-dark);
+}
+
+.show-unavailable {
+  margin: 0.75rem 0 0;
+  color: var(--ink-soft);
 }
 
 .muted {

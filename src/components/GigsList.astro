@@ -2,11 +2,10 @@
 import { site } from "../content/site";
 import type { KintanaPublicEvent } from "@kintana/sdk";
 import {
-  eventCity,
   eventShowHref,
   eventTicketsHref,
-  eventVenue,
-  formatShowDate,
+  formatGigDateBlock,
+  formatGigLocation,
   ticketLinkLabel,
 } from "../lib/events";
 
@@ -32,9 +31,14 @@ const { events, heading = site.showsHeading, showHeading = true, compact = false
           events.map((event) => {
             const showHref = eventShowHref(event);
             const ticketsHref = eventTicketsHref(event);
+            const { date, time } = formatGigDateBlock(event);
+            const location = formatGigLocation(event);
             return (
               <li class="gig-row">
-                <div class="gig-date">{formatShowDate(event.date)}</div>
+                <div class="gig-date">
+                  <span class="gig-date-day">{date}</span>
+                  {time ? <span class="gig-date-time">{time}</span> : null}
+                </div>
                 <div class="gig-info">
                   {
                     showHref ? (
@@ -45,9 +49,7 @@ const { events, heading = site.showsHeading, showHeading = true, compact = false
                       <p class="gig-name">{event.name}</p>
                     )
                   }
-                  <p class="gig-venue">
-                    {eventVenue(event)} · {eventCity(event)}
-                  </p>
+                  <p class="gig-venue">{location}</p>
                 </div>
                 <a
                   class="btn btn-primary btn-sm"

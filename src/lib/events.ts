@@ -36,6 +36,28 @@ export function formatEventSchedule(event: KintanaPublicEvent): string {
   return date;
 }
 
+export function formatGigDateBlock(event: KintanaPublicEvent): { date: string; time: string | null } {
+  const show = formatEventTime(event.showTime);
+  const doors = formatEventTime(event.doorsOpen);
+
+  return {
+    date: formatShowDate(event.date),
+    time: show ?? doors,
+  };
+}
+
+export function formatGigLocation(event: KintanaPublicEvent): string {
+  const venue = event.venue?.name?.trim() || "";
+  const city = event.city?.trim() || event.venue?.city?.trim() || "";
+
+  if (venue && city && venue.toLowerCase() !== city.toLowerCase()) {
+    return `${venue} · ${city}`;
+  }
+  if (venue) return venue;
+  if (city) return city;
+  return "—";
+}
+
 export function eventShowPath(slug: string): string {
   return `/shows/${slug}/`;
 }
@@ -69,6 +91,11 @@ export function eventTicketHref(event: KintanaPublicEvent): string {
 
 export function isTicketingBlocked(event: KintanaPublicEvent): boolean {
   return event.status === "sold-out" || event.status === "postponed" || event.status === "cancelled";
+}
+
+/** Embed checkout via `[data-kintana-widget]` + `/_t/k.js` (internal Stripe or external vendor). */
+export function eventSupportsEmbedCheckout(event: KintanaPublicEvent): boolean {
+  return Boolean(event.id?.trim()) && !isTicketingBlocked(event);
 }
 
 export function eventStatusLabel(status: KintanaPublicEvent["status"]): string | null {

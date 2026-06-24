@@ -159,6 +159,10 @@ export const site = {
         "It is a wild, outlandish and yet 100% true story about falling in love with the wrong person.",
       ],
       accolade: "Top 50 best reviewed shows — British Comedy Guide, Edinburgh Fringe 2023",
+      image: {
+        src: "/solo-shows/wonderland.png",
+        alt: "George Zacharopoulos — Wonderland Edinburgh Fringe poster",
+      },
       pressReviews: [
         {
           quote:
