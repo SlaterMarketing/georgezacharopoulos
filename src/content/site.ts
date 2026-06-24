@@ -61,7 +61,6 @@ export const site = {
       "My name is George Zacharopoulos, though British comperes often call me George Zach because they can't pronounce my ridiculous name. I was born in Kalamata, Greece — a land of olives and debt — but moved to Newcastle to study Biochemistry. I then stayed for the weather. And the fact I am dodging my national service.",
       "Luckily I discovered comedy. I now headline clubs across the UK, Europe, Dubai, and Australia. I've supported Jim Jefferies, Chris McCausland, Sophie Willan, and TJ Miller on tour, and performed everywhere from the Edinburgh Fringe to London's O2 Arena.",
       "My comedy is storytelling-driven — immigration, identity, relationships, and the chaos of trying to look like you've got your life together when you absolutely don't.",
-      "Am I funny? Scroll to the gallery and you will see a photo of at least one guy laughing. That photo was on my dating app profile and convinced my now girlfriend to swipe right. So yes — I am a pretty big deal.",
     ],
   },
   soloShowsIntro: {
