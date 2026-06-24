@@ -3,11 +3,10 @@ import { site } from "../content/site";
 
 interface Props {
   currentPath?: string;
-  nextShowHref?: string | null;
   overlay?: boolean;
 }
 
-const { currentPath = Astro.url.pathname, nextShowHref = null, overlay = false } = Astro.props;
+const { currentPath = Astro.url.pathname, overlay = false } = Astro.props;
 
 function isActive(href: string) {
   if (href === "/") return currentPath === "/" || currentPath === "";
@@ -47,13 +46,9 @@ function isActive(href: string) {
         }
       </nav>
 
-      {
-        nextShowHref ? (
-          <div class="header-actions">
-            <a class="btn btn-primary btn-sm" href={nextShowHref}>Tickets</a>
-          </div>
-        ) : null
-      }
+      <div class="header-actions">
+        <a class="btn btn-primary btn-sm" href="/shows/">Shows</a>
+      </div>
     </div>
   </div>
 </header>

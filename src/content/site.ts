@@ -222,7 +222,6 @@ export const site = {
     body: "Bookings, press, or just saying hi — drop a line below.",
   },
   nav: [
-    { label: "Gigs", href: "/shows/" },
     { label: "Solo shows", href: "/solo-shows/" },
     { label: "Press", href: "/press/" },
     { label: "Gallery", href: "/gallery/" },

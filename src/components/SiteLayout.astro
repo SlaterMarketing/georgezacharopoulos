@@ -8,20 +8,18 @@ interface Props {
   title?: string;
   description?: string;
   headerOverlay?: boolean;
-  nextShowHref?: string | null;
 }
 
 const {
   title = site.artistName,
   description = site.description,
   headerOverlay = false,
-  nextShowHref = null,
 }: Props = Astro.props;
 ---
 
 <Base title={title} description={description}>
   <div class="site-shell">
-    <SiteHeader overlay={headerOverlay} nextShowHref={nextShowHref} />
+    <SiteHeader overlay={headerOverlay} />
     <main class="site-main">
       <slot />
     </main>

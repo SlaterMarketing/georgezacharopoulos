@@ -3,7 +3,6 @@ import SiteLayout from "./SiteLayout.astro";
 import GigsList from "./GigsList.astro";
 import { site } from "../content/site";
 import { createKintanaClientFromEnv, hasKintanaCredentials } from "../lib/kintana-env";
-import { reserveTicketHref } from "../lib/events";
 import type { KintanaPublicEvent } from "@kintana/sdk";
 import "../styles/global.css";
 
@@ -24,7 +23,6 @@ if (hasKintanaCredentials()) {
   title={`Gigs · ${site.artistName}`}
   description={site.showsHeading}
   headerOverlay={true}
-  nextShowHref={reserveTicketHref(events)}
 >
   <section class="page-hero">
     <div class="container">
