@@ -1,7 +1,6 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import GigsList from "./GigsList.astro";
-import PressQuotes from "./PressQuotes.astro";
 import SocialIcon from "./SocialIcon.astro";
 import { site } from "../content/site";
 import { createKintanaClientFromEnv, hasKintanaCredentials } from "../lib/kintana-env";
@@ -63,12 +62,6 @@ const galleryPreview = site.gallery.images.slice(0, 4);
           }
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="home-band home-band--quote">
-    <div class="container">
-      <PressQuotes reviews={site.reviews} featured={true} />
     </div>
   </section>
 
