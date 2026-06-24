@@ -8,6 +8,8 @@
   --line: rgba(23, 19, 15, 0.12);
   --accent: #b94824;
   --accent-dark: #943619;
+  --btn-gradient: linear-gradient(135deg, #c83716 0%, #eb9503 100%);
+  --btn-gradient-hover: linear-gradient(135deg, #b03014 0%, #d48502 100%);
   --night: #121820;
   --night-soft: #1c2430;
   --white: #ffffff;
@@ -161,11 +163,11 @@ a {
 
 .btn-primary {
   color: var(--white);
-  background: var(--accent);
+  background: var(--btn-gradient);
 }
 
 .btn-primary:hover {
-  background: var(--accent-dark);
+  background: var(--btn-gradient-hover);
 }
 
 .btn-secondary {
@@ -1172,10 +1174,15 @@ a.quote-source:hover {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--white);
-  background: var(--accent);
+  background: var(--btn-gradient);
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
+  transition: background 0.2s var(--ease);
+}
+
+.contact-form-panel :is(button, [type="submit"]):hover {
+  background: var(--btn-gradient-hover);
 }
 
 /* Show detail */
@@ -1530,12 +1537,13 @@ a.quote-source:hover {
   text-transform: uppercase;
   text-decoration: none;
   color: var(--white);
-  background: var(--accent);
+  background: var(--btn-gradient);
   border-radius: var(--radius);
+  transition: background 0.2s var(--ease);
 }
 
 .show-ticket-link:hover {
-  background: var(--accent-dark);
+  background: var(--btn-gradient-hover);
 }
 
 .show-unavailable {
