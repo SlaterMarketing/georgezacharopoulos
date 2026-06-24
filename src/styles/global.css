@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap");
 
 :root {
-  --paper: #f3ece1;
+  --paper: #faf9f6;
   --paper-warm: #ebe0cf;
   --ink: #17130f;
   --ink-soft: #4a433c;
@@ -10,7 +10,7 @@
   --accent-dark: #943619;
   --btn-gradient: linear-gradient(135deg, #c83716 0%, #eb9503 100%);
   --btn-gradient-hover: linear-gradient(135deg, #b03014 0%, #d48502 100%);
-  --night: #121820;
+  --night: #17130f;
   --night-soft: #1c2430;
   --white: #ffffff;
   --font-display: "Fraunces", Georgia, serif;
@@ -190,7 +190,7 @@ a {
 }
 
 .site-header--overlay:not(.is-scrolled) {
-  background: linear-gradient(180deg, rgba(18, 24, 32, 0.72) 0%, rgba(18, 24, 32, 0) 100%);
+  background: linear-gradient(180deg, rgba(23, 19, 15, 0.72) 0%, rgba(23, 19, 15, 0) 100%);
 }
 
 .site-header--overlay:not(.is-scrolled) .site-logo {
@@ -222,7 +222,7 @@ a {
 }
 
 .site-header.is-scrolled {
-  background: rgba(243, 236, 225, 0.94);
+  background: rgba(250, 249, 246, 0.94);
   border-bottom: 1px solid var(--line);
 }
 
@@ -417,7 +417,7 @@ a {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(18, 24, 32, 0.15) 0%, rgba(18, 24, 32, 0.55) 45%, rgba(18, 24, 32, 0.92) 100%);
+    linear-gradient(180deg, rgba(23, 19, 15, 0.15) 0%, rgba(23, 19, 15, 0.55) 45%, rgba(23, 19, 15, 0.92) 100%);
 }
 
 .home-hero-content {
@@ -475,8 +475,16 @@ a {
 .home-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  align-items: center;
+  gap: 0.75rem 1rem;
   margin-top: 1.75rem;
+}
+
+.home-hero-actions .home-social {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0;
+  margin-left: auto;
 }
 
 .home-hero-actions .btn-secondary {
@@ -486,12 +494,6 @@ a {
 
 .home-hero-actions .btn-secondary:hover {
   border-color: var(--white);
-}
-
-.home-social {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 2rem;
 }
 
 .home-social .social-icon {
@@ -1227,9 +1229,9 @@ a.quote-source:hover {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(18, 24, 32, 0.35) 0%,
-    rgba(18, 24, 32, 0.55) 45%,
-    rgba(18, 24, 32, 0.92) 100%
+    rgba(23, 19, 15, 0.35) 0%,
+    rgba(23, 19, 15, 0.55) 45%,
+    rgba(23, 19, 15, 0.92) 100%
   );
 }
 
@@ -1317,7 +1319,7 @@ a.quote-source:hover {
   color: var(--white);
   background: var(--accent);
   border-radius: var(--radius);
-  box-shadow: 0 12px 32px rgba(18, 24, 32, 0.28);
+  box-shadow: 0 12px 32px rgba(23, 19, 15, 0.28);
 }
 
 .show-hero-date-weekday,
@@ -1570,9 +1572,10 @@ a.quote-source:hover {
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
 
-.social-icon:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+.social-icon:hover,
+.social-icon:focus-visible {
+  background: var(--btn-gradient);
+  border-color: transparent;
   color: var(--white);
 }
 

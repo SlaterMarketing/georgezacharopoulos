@@ -55,14 +55,14 @@ const galleryPreview = site.gallery.images.slice(0, 4);
           {nextShowHref ? "Get tickets" : "See gigs"}
         </a>
         <a class="btn btn-secondary" href="/bio/">Read bio</a>
-      </div>
 
-      <div class="home-social" aria-label="Social links">
-        {
-          site.social.map((link) => (
-            <SocialIcon platform={link.platform} href={link.href} label={link.label} size="md" />
-          ))
-        }
+        <div class="home-social" aria-label="Social links">
+          {
+            site.social.map((link) => (
+              <SocialIcon platform={link.platform} href={link.href} label={link.label} size="md" />
+            ))
+          }
+        </div>
       </div>
     </div>
   </section>

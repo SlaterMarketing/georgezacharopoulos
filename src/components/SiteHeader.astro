@@ -47,14 +47,13 @@ function isActive(href: string) {
         }
       </nav>
 
-      <div class="header-actions">
-        {
-          nextShowHref ? (
+      {
+        nextShowHref ? (
+          <div class="header-actions">
             <a class="btn btn-primary btn-sm" href={nextShowHref}>Tickets</a>
-          ) : null
-        }
-        <a class="btn btn-secondary btn-sm" href="/contact/">Contact</a>
-      </div>
+          </div>
+        ) : null
+      }
     </div>
   </div>
 </header>

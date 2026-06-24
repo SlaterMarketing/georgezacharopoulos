@@ -227,6 +227,7 @@ export const site = {
     { label: "Press", href: "/press/" },
     { label: "Gallery", href: "/gallery/" },
     { label: "Bio", href: "/bio/" },
+    { label: "Contact", href: "/contact/" },
   ],
   social: [
     { label: "Instagram", href: "https://www.instagram.com/greekcomedian", platform: "instagram" as const },
