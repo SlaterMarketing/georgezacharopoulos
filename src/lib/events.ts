@@ -133,6 +133,13 @@ export function eventVenue(event: KintanaPublicEvent): string {
   return event.venue?.name?.trim() || "—";
 }
 
+export function eventVenueDescription(event: KintanaPublicEvent): string | null {
+  const venue = event.venue as (NonNullable<KintanaPublicEvent["venue"]> & {
+    description?: string | null;
+  }) | null;
+  return venue?.description?.trim() || null;
+}
+
 export function eventTicketHref(event: KintanaPublicEvent): string {
   return event.ticketUrl?.trim() || event.embedUrl?.trim() || "#";
 }

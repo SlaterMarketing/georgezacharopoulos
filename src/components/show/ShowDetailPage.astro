@@ -6,6 +6,7 @@ import { createKintanaClientFromEnv, hasKintanaCredentials } from "../../lib/kin
 import {
   eventStatusLabel,
   eventVenue,
+  eventVenueDescription,
   eventVenueMapEmbedUrl,
   eventVenueMapsUrl,
   formatEventHeroDateParts,
@@ -51,6 +52,7 @@ const dateParts = event ? formatEventHeroDateParts(event.date) : null;
 const venueName = event ? eventVenue(event) : "";
 const venueLocation = event ? formatGigLocation(event) : "";
 const venueAddress = event?.venue?.address?.trim() || "";
+const venueDescription = event ? eventVenueDescription(event) : null;
 const mapsUrl = event ? eventVenueMapsUrl(event) : null;
 const mapEmbedUrl = event ? eventVenueMapEmbedUrl(event) : null;
 const showVenueSection = Boolean(
@@ -149,6 +151,7 @@ const showVenueSection = Boolean(
                     <div class="show-venue">
                       {venueName !== "—" ? <p class="show-venue-name">{venueName}</p> : null}
                       {venueAddress ? <p class="show-venue-address">{venueAddress}</p> : null}
+                      {venueDescription ? <div class="show-venue-description">{venueDescription}</div> : null}
                       {
                         mapEmbedUrl ? (
                           <div class="show-venue-map">

@@ -82,6 +82,10 @@ export const site = {
       paragraphs: [
         "Brand new hour. After a year of sold-out shows, an O2 Arena gig, and a proposal, everything went to shit. A heartwarming, hilarious show about how joy survives when your world collapses.",
       ],
+      image: {
+        src: "/solo-shows/meaning-of-life-maybe.png",
+        alt: "George Zacharopoulos — The Meaning of Life, Maybe Melbourne International Comedy Festival poster",
+      },
     },
     {
       title: "The Butterfly Effect",
@@ -89,6 +93,10 @@ export const site = {
       paragraphs: [
         "Greek Comedian of the Year show — sharp storytelling about cause, chaos, and accidentally becoming an adult.",
       ],
+      image: {
+        src: "/solo-shows/butterfly-effect.png",
+        alt: "George Zacharopoulos — The Butterfly Effect promotional photo",
+      },
     },
     {
       title: "Greek in the Sheets",
