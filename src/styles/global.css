@@ -802,6 +802,10 @@ a.gig-name:hover {
   padding-top: clamp(5.5rem, 12vw, 7rem);
 }
 
+.page-content--show-has-hero {
+  padding-top: clamp(2.5rem, 6vw, 4rem);
+}
+
 .page-content--narrow {
   max-width: 42rem;
 }
@@ -1176,6 +1180,164 @@ a.quote-source:hover {
 
 /* Show detail */
 
+.show-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--night);
+}
+
+.show-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.show-hero-image--desktop {
+  display: none;
+}
+
+.show-hero-image--mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .show-hero-image--desktop {
+    display: block;
+  }
+
+  .show-hero-image--mobile {
+    display: none;
+  }
+}
+
+.show-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 24, 32, 0.35) 0%,
+    rgba(18, 24, 32, 0.55) 45%,
+    rgba(18, 24, 32, 0.92) 100%
+  );
+}
+
+.show-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: clamp(2rem, 6vw, 3.5rem);
+  padding-top: 5.5rem;
+}
+
+.show-hero-back {
+  margin-bottom: 1.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.show-hero-back:hover {
+  color: var(--white);
+}
+
+.show-hero-main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.show-hero-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.show-hero-status {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+.show-hero-title {
+  margin: 0;
+  max-width: min(100%, 40rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  color: var(--white);
+}
+
+.show-hero-subtitle {
+  margin: 0.75rem 0 0;
+  max-width: 28rem;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.show-hero-meta {
+  margin: 0.65rem 0 0;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.show-hero-date {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4.75rem;
+  padding: 0.65rem 0.85rem;
+  text-align: center;
+  color: var(--white);
+  background: var(--accent);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(18, 24, 32, 0.28);
+}
+
+.show-hero-date-weekday,
+.show-hero-date-month {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.show-hero-date-day {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.show-hero-date-city {
+  margin-top: 0.35rem;
+  max-width: 6.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.62rem;
+  font-weight: 600;
+  opacity: 0.92;
+}
+
 .show-layout {
   display: grid;
   gap: 2rem;
@@ -1228,6 +1390,10 @@ a.quote-source:hover {
   border-radius: var(--radius);
 }
 
+.show-section {
+  margin-top: 2rem;
+}
+
 .show-section h2 {
   margin: 0 0 0.75rem;
   font-size: 0.82rem;
@@ -1240,6 +1406,48 @@ a.quote-source:hover {
 .show-about {
   color: var(--ink-soft);
   white-space: pre-wrap;
+}
+
+.show-venue {
+  display: grid;
+  gap: 1rem;
+}
+
+.show-venue-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  line-height: 1.15;
+}
+
+.show-venue-address {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.show-venue-map {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.show-venue-map iframe {
+  display: block;
+  width: 100%;
+  height: 16rem;
+  border: 0;
+}
+
+.show-venue-maps-link {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.show-venue-maps-link:hover {
+  color: var(--accent-dark);
 }
 
 .show-lineup {
@@ -1280,11 +1488,17 @@ a.quote-source:hover {
 }
 
 .ticket-widget {
-  min-height: 28rem;
   overflow: hidden;
   border-radius: calc(var(--radius) - 2px);
 }
 
+.ticket-widget iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.ticket-widget-wrap:has(.ticket-widget iframe) .ticket-widget-loading,
 .ticket-widget:has(iframe) + .ticket-widget-loading {
   display: none;
 }

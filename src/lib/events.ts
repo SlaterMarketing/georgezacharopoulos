@@ -11,6 +11,32 @@ export function formatShowDate(date: string): string {
   });
 }
 
+export function formatEventHeroDateParts(dateInput: string) {
+  const parsed = new Date(`${dateInput.trim()}T12:00:00`);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return {
+    weekday: parsed.toLocaleDateString("en-US", { weekday: "short" }),
+    day: String(parsed.getDate()),
+    month: parsed.toLocaleDateString("en-US", { month: "short" }),
+    year: parsed.toLocaleDateString("en-US", { year: "numeric" }),
+  };
+}
+
+export function splitEventDisplayTitle(name: string): { headline: string; subtitle: string | null } {
+  const colon = name.match(/^([^:]+):\s*(.+)$/);
+  if (colon) {
+    return { headline: colon[1]!.trim(), subtitle: colon[2]!.trim() };
+  }
+  const parts = name.split(/\s+[–—-]\s+/);
+  if (parts.length >= 2) {
+    return {
+      headline: parts[0]!.trim(),
+      subtitle: parts.slice(1).join(" – ").trim() || null,
+    };
+  }
+  return { headline: name.trim(), subtitle: null };
+}
+
 export function formatEventTime(time: string | null | undefined): string | null {
   if (!time?.trim()) return null;
   const [hourPart, minutePart] = time.split(":");
@@ -56,6 +82,28 @@ export function formatGigLocation(event: KintanaPublicEvent): string {
   if (venue) return venue;
   if (city) return city;
   return "—";
+}
+
+export function eventVenueMapsUrl(event: Pick<KintanaPublicEvent, "venue" | "city">): string | null {
+  const venue = event.venue;
+  if (venue?.lat != null && venue?.lng != null) {
+    return `https://www.google.com/maps/search/?api=1&query=${venue.lat},${venue.lng}`;
+  }
+  const query = [venue?.address, venue?.name, event.city].filter(Boolean).join(", ");
+  return query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}` : null;
+}
+
+export function eventVenueMapEmbedUrl(event: Pick<KintanaPublicEvent, "venue" | "city">): string | null {
+  const venue = event.venue;
+  if (venue?.lat != null && venue?.lng != null) {
+    return `https://maps.google.com/maps?q=${venue.lat},${venue.lng}&z=15&output=embed`;
+  }
+  const query = venue?.address?.trim()
+    ? `${venue.name?.trim() ? `${venue.name.trim()}, ` : ""}${venue.address.trim()}`
+    : [venue?.name, event.city].filter(Boolean).join(", ");
+  return query
+    ? `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=15&ie=UTF8&iwloc=&output=embed`
+    : null;
 }
 
 export function eventShowPath(slug: string): string {

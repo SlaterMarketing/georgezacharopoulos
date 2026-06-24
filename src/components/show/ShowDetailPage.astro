@@ -4,14 +4,18 @@ import ShowCheckoutPanel from "./ShowCheckoutPanel.astro";
 import { site } from "../../content/site";
 import { createKintanaClientFromEnv, hasKintanaCredentials } from "../../lib/kintana-env";
 import {
-  eventCity,
   eventStatusLabel,
   eventVenue,
+  eventVenueMapEmbedUrl,
+  eventVenueMapsUrl,
+  formatEventHeroDateParts,
   formatEventSchedule,
+  formatGigLocation,
   formatMinorUnitsPrice,
+  splitEventDisplayTitle,
   sortedLineup,
 } from "../../lib/events";
-import { eventHeroUrl } from "../../lib/event-media";
+import { eventHeroDesktopUrl, eventHeroMobileUrl } from "../../lib/event-media";
 import type { KintanaPublicEvent } from "@kintana/sdk";
 import "../../styles/global.css";
 
@@ -39,45 +43,140 @@ const aboutCopy = event?.longDescription?.trim() || event?.description?.trim() |
 const statusLabel = event ? eventStatusLabel(event.status) : null;
 const priceLabel = event ? formatMinorUnitsPrice(event) : null;
 const lineup = event ? sortedLineup(event) : [];
-const heroImage = event ? eventHeroUrl(event) : null;
+const heroDesktop = event ? eventHeroDesktopUrl(event) : null;
+const heroMobile = event ? eventHeroMobileUrl(event) : null;
+const hasHero = Boolean(heroDesktop);
+const { headline, subtitle } = event ? splitEventDisplayTitle(event.name) : { headline: "", subtitle: null };
+const dateParts = event ? formatEventHeroDateParts(event.date) : null;
+const venueName = event ? eventVenue(event) : "";
+const venueLocation = event ? formatGigLocation(event) : "";
+const venueAddress = event?.venue?.address?.trim() || "";
+const mapsUrl = event ? eventVenueMapsUrl(event) : null;
+const mapEmbedUrl = event ? eventVenueMapEmbedUrl(event) : null;
+const showVenueSection = Boolean(
+  event && (venueName !== "—" || venueAddress || mapEmbedUrl),
+);
 ---
 
-<SiteLayout title={pageTitle} description={pageDescription}>
-  <section class="page-content page-content--show">
+<SiteLayout title={pageTitle} description={pageDescription} headerOverlay={hasHero}>
+  {
+    event && hasHero ? (
+      <section class="show-hero">
+        <img
+          class="show-hero-image show-hero-image--desktop"
+          src={heroDesktop!}
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+        <img
+          class="show-hero-image show-hero-image--mobile"
+          src={heroMobile ?? heroDesktop!}
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+        <div class="show-hero-scrim" aria-hidden="true"></div>
+
+        <div class="show-hero-content container">
+          <a class="show-hero-back" href="/shows/">← All gigs</a>
+
+          <div class="show-hero-main">
+            <div class="show-hero-copy">
+              {statusLabel ? <p class="show-hero-status">{statusLabel}</p> : null}
+              <h1 class="show-hero-title">{headline}</h1>
+              {subtitle ? <p class="show-hero-subtitle">{subtitle}</p> : null}
+              <p class="show-hero-meta">{formatEventSchedule(event)}</p>
+              <p class="show-hero-meta">{venueLocation}</p>
+            </div>
+
+            {
+              dateParts ? (
+                <div class="show-hero-date">
+                  <span class="show-hero-date-weekday">{dateParts.weekday}</span>
+                  <span class="show-hero-date-day">{dateParts.day}</span>
+                  <span class="show-hero-date-month">{dateParts.month}</span>
+                  {event.city ? <span class="show-hero-date-city">{event.city}</span> : null}
+                </div>
+              ) : null
+            }
+          </div>
+        </div>
+      </section>
+    ) : null
+  }
+
+  <section class:list={["page-content", "page-content--show", hasHero && "page-content--show-has-hero"]}>
     <div class="container">
       {
         event ? (
           <div class="show-layout has-checkout">
             <article>
-              <p class="show-back">
-                <a href="/shows/">← All gigs</a>
-              </p>
-
-              {statusLabel ? <p class="show-status">{statusLabel}</p> : null}
-
-              <h1 class="show-title">{event.name}</h1>
-              <p class="show-meta-line">{formatEventSchedule(event)}</p>
-              <p class="show-meta-line">
-                {eventVenue(event)}
-                {eventCity(event) !== "—" ? ` · ${eventCity(event)}` : ""}
-              </p>
-              {event.venue?.address ? <p class="show-meta-line">{event.venue.address}</p> : null}
-              {priceLabel ? <p class="show-meta-line">From {priceLabel}</p> : null}
-              {event.ageRestriction ? <p class="show-meta-line">{event.ageRestriction}</p> : null}
-
               {
-                heroImage ? (
-                  <figure class="show-poster">
-                    <img src={heroImage} alt="" loading="eager" />
-                  </figure>
+                !hasHero ? (
+                  <>
+                    <p class="show-back">
+                      <a href="/shows/">← All gigs</a>
+                    </p>
+
+                    {statusLabel ? <p class="show-status">{statusLabel}</p> : null}
+
+                    <h1 class="show-title">{event.name}</h1>
+                    <p class="show-meta-line">{formatEventSchedule(event)}</p>
+                    <p class="show-meta-line">{venueLocation}</p>
+                    {venueAddress ? <p class="show-meta-line">{venueAddress}</p> : null}
+                  </>
                 ) : null
               }
+
+              {priceLabel ? <p class="show-meta-line">From {priceLabel}</p> : null}
+              {event.ageRestriction ? <p class="show-meta-line">{event.ageRestriction}</p> : null}
+              {hasHero && venueAddress ? <p class="show-meta-line">{venueAddress}</p> : null}
 
               {
                 aboutCopy ? (
                   <section class="show-section">
                     <h2>About</h2>
                     <div class="show-about">{aboutCopy}</div>
+                  </section>
+                ) : null
+              }
+
+              {
+                showVenueSection ? (
+                  <section class="show-section" id="venue">
+                    <h2>Venue</h2>
+                    <div class="show-venue">
+                      {venueName !== "—" ? <p class="show-venue-name">{venueName}</p> : null}
+                      {venueAddress ? <p class="show-venue-address">{venueAddress}</p> : null}
+                      {
+                        mapEmbedUrl ? (
+                          <div class="show-venue-map">
+                            <iframe
+                              title={`${venueName !== "—" ? venueName : venueLocation} on Google Maps`}
+                              src={mapEmbedUrl}
+                              width="100%"
+                              height="280"
+                              loading="lazy"
+                              allowfullscreen
+                              referrerpolicy="no-referrer-when-downgrade"
+                            />
+                          </div>
+                        ) : null
+                      }
+                      {
+                        mapsUrl ? (
+                          <a
+                            class="show-venue-maps-link"
+                            href={mapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View on Google Maps →
+                          </a>
+                        ) : null
+                      }
+                    </div>
                   </section>
                 ) : null
               }
