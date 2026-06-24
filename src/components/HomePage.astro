@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import GigsList from "./GigsList.astro";
+import GallerySlideshow from "./GallerySlideshow.astro";
 import SocialIcon from "./SocialIcon.astro";
 import { site } from "../content/site";
 import { createKintanaClientFromEnv, hasKintanaCredentials } from "../lib/kintana-env";
@@ -23,7 +24,6 @@ if (hasKintanaCredentials()) {
 const nextShowHref = reserveTicketHref(events);
 const previewEvents = events.slice(0, 4);
 const featuredShow = site.soloShows[0];
-const galleryPreview = site.gallery.images.slice(0, 4);
 ---
 
 <SiteLayout
@@ -78,36 +78,46 @@ const galleryPreview = site.gallery.images.slice(0, 4);
     </div>
   </section>
 
-  <section class="home-band home-band--warm">
-    <div class="container home-solo-spotlight">
-      <div>
-        <p class="eyebrow">Current solo hour</p>
-        <h2 class="section-title">{featuredShow.title}</h2>
-        {featuredShow.year ? <p class="solo-year">{featuredShow.year}</p> : null}
-        <p class="body-copy">{featuredShow.paragraphs[0]}</p>
-        <a class="text-link" href="/solo-shows/">More solo shows →</a>
-      </div>
-      <div class="award-stack" aria-label="Awards">
-        {
-          site.awards.map((award) => (
-            <p class="award-line">{award}</p>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
   <section class="home-band">
-    <div class="container home-about-teaser">
-      <div>
+    <div class="container home-story">
+      <header class="home-story-head">
         <p class="eyebrow">About George</p>
         <h2 class="section-title">From Kalamata to the O2</h2>
-        <p class="body-copy">{site.about.paragraphs[1]}</p>
-        <a class="text-link" href="/bio/">Full bio →</a>
+      </header>
+
+      <div class="home-story-grid">
+        <div class="home-story-main">
+          <p class="body-copy">{site.about.paragraphs[1]}</p>
+          <blockquote class="home-story-quote">
+            &ldquo;{site.about.paragraphs[3]}&rdquo;
+          </blockquote>
+          <a class="text-link" href="/bio/">Full bio →</a>
+        </div>
+
+        <aside class="home-story-show">
+          {
+            featuredShow.image ? (
+              <figure class="home-story-poster">
+                <img
+                  src={featuredShow.image.src}
+                  alt={featuredShow.image.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ) : null
+          }
+          <p class="eyebrow">Current solo hour</p>
+          <h3 class="home-story-show-title">{featuredShow.title}</h3>
+          {featuredShow.year ? <p class="solo-year">{featuredShow.year}</p> : null}
+          <p class="body-copy">{featuredShow.paragraphs[0]}</p>
+          <a class="text-link" href="/solo-shows/">More solo shows →</a>
+        </aside>
       </div>
-      <blockquote class="bio-aside">
-        &ldquo;{site.about.paragraphs[3]}&rdquo;
-      </blockquote>
+
+      <ul class="home-story-awards" aria-label="Awards">
+        {site.awards.map((award) => <li>{award}</li>)}
+      </ul>
     </div>
   </section>
 
@@ -119,14 +129,8 @@ const galleryPreview = site.gallery.images.slice(0, 4);
       </div>
       <a class="text-link light" href="/gallery/">Full gallery →</a>
     </div>
-    <div class="container gallery-preview">
-      {
-        galleryPreview.map((image, index) => (
-          <figure class:list={["gallery-preview-item", index === 0 && "gallery-preview-item--lead"]}>
-            <img src={image.src} alt={image.alt} loading={index < 2 ? "eager" : "lazy"} decoding="async" />
-          </figure>
-        ))
-      }
+    <div class="container">
+      <GallerySlideshow images={site.gallery.images} />
     </div>
   </section>
 

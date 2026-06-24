@@ -1,0 +1,164 @@
+---
+import type { GalleryImage } from "../content/site";
+
+interface Props {
+  images: readonly GalleryImage[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="gallery-slideshow" data-gallery-slideshow>
+  <div class="gallery-slideshow-viewport">
+    <div class="gallery-slideshow-track" data-gallery-track>
+      {
+        images.map((image, index) => (
+          <figure class="gallery-slideshow-slide" data-gallery-slide aria-hidden={index === 0 ? "false" : "true"}>
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              draggable="false"
+            />
+          </figure>
+        ))
+      }
+    </div>
+
+    {
+      images.length > 1 ? (
+        <>
+          <button
+            type="button"
+            class="gallery-slideshow-arrow gallery-slideshow-arrow--prev"
+            data-gallery-prev
+            aria-label="Previous photo"
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            class="gallery-slideshow-arrow gallery-slideshow-arrow--next"
+            data-gallery-next
+            aria-label="Next photo"
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </>
+      ) : null
+    }
+  </div>
+
+  {
+    images.length > 1 ? (
+      <div class="gallery-slideshow-footer">
+        <div class="gallery-slideshow-dots" data-gallery-dots role="tablist" aria-label="Gallery slides">
+          {
+            images.map((image, index) => (
+              <button
+                type="button"
+                class:list={["gallery-slideshow-dot", index === 0 && "is-active"]}
+                data-gallery-dot={index}
+                role="tab"
+                aria-selected={index === 0 ? "true" : "false"}
+                aria-label={`Photo ${index + 1}: ${image.alt}`}
+              />
+            ))
+          }
+        </div>
+        <p class="gallery-slideshow-count" data-gallery-count aria-live="polite">
+          1 / {images.length}
+        </p>
+      </div>
+    ) : null
+  }
+</div>
+
+<script>
+  document.querySelectorAll("[data-gallery-slideshow]").forEach((root) => {
+    if (!(root instanceof HTMLElement)) return;
+
+    const track = root.querySelector("[data-gallery-track]");
+    const slides = root.querySelectorAll("[data-gallery-slide]");
+    const prev = root.querySelector("[data-gallery-prev]");
+    const next = root.querySelector("[data-gallery-next]");
+    const dots = root.querySelectorAll("[data-gallery-dot]");
+    const count = root.querySelector("[data-gallery-count]");
+
+    if (!(track instanceof HTMLElement) || slides.length <= 1) return;
+
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const intervalMs = 5500;
+
+    const goTo = (nextIndex: number) => {
+      index = (nextIndex + slides.length) % slides.length;
+      track.style.transform = `translateX(-${index * 100}%)`;
+
+      slides.forEach((slide, i) => {
+        if (slide instanceof HTMLElement) {
+          slide.setAttribute("aria-hidden", i === index ? "false" : "true");
+        }
+      });
+
+      dots.forEach((dot, i) => {
+        if (dot instanceof HTMLButtonElement) {
+          dot.classList.toggle("is-active", i === index);
+          dot.setAttribute("aria-selected", i === index ? "true" : "false");
+        }
+      });
+
+      if (count instanceof HTMLElement) {
+        count.textContent = `${index + 1} / ${slides.length}`;
+      }
+    };
+
+    const stopAutoplay = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    };
+
+    const startAutoplay = () => {
+      stopAutoplay();
+      if (document.hidden) return;
+      timer = setInterval(() => goTo(index + 1), intervalMs);
+    };
+
+    prev?.addEventListener("click", () => {
+      goTo(index - 1);
+      startAutoplay();
+    });
+
+    next?.addEventListener("click", () => {
+      goTo(index + 1);
+      startAutoplay();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const target = dot.getAttribute("data-gallery-dot");
+        if (target === null) return;
+        goTo(Number(target));
+        startAutoplay();
+      });
+    });
+
+    root.addEventListener("mouseenter", stopAutoplay);
+    root.addEventListener("mouseleave", startAutoplay);
+    root.addEventListener("focusin", stopAutoplay);
+    root.addEventListener("focusout", (event) => {
+      if (event.relatedTarget instanceof Node && root.contains(event.relatedTarget)) return;
+      startAutoplay();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopAutoplay();
+      else startAutoplay();
+    });
+
+    startAutoplay();
+  });
+</script>
